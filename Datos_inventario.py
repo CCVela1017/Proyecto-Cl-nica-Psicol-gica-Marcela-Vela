@@ -4,7 +4,6 @@ from tkinter import ttk
 
 
 def main():
-    cargar_base_de_datos()
     # creación de ventana y cosas basicas
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
@@ -13,7 +12,7 @@ def main():
     frame = customtkinter.CTkFrame(master=root)
     frame.pack(pady=20, padx=60, fill='both', expand=True)
 
-
+    # cargar frontend
     front_end(frame)
 
     root.geometry("1280x720")
@@ -21,14 +20,16 @@ def main():
     return
 
 
-def cargar_base_de_datos():
+def cargar_base_de_datos(table):
     try:
         conexion = sqlite3.connect("src/database")
         cursor = conexion.cursor()
         cursor.execute("SELECT * FROM objetos_de_inventario")
         rows = cursor.fetchall()
         for row in rows:
-            print(row)
+            data = row
+            table.insert(parent='', index=0, values=data)
+
     except Exception as ex:
         print(ex)
 
@@ -60,7 +61,7 @@ def front_end(frame):
     table.heading('Caracteristicas', text='Caracteristicas')
     table.pack()
     table.place(x=0, y=150)
-
+    cargar_base_de_datos(table)
     return
 
 
