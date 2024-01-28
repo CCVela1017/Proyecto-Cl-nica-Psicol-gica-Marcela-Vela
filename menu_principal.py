@@ -32,6 +32,7 @@ def main_window():
 
     root = customtkinter.CTk()
     root.title("Menú Principal")
+    root.iconbitmap('icon.ico')
     frame = customtkinter.CTkFrame(master=root)
     frame.pack(pady=10, padx=10, fill='both', expand=True)
     frame2 = customtkinter.CTkFrame(master=frame, fg_color='dark gray', width=50)
