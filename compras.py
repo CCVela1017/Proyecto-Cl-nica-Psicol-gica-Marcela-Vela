@@ -112,9 +112,10 @@ def main():
     lb_total_confi = customtkinter.CTkLabel(master=frame2, text="TOTAL:    " + total, font=("Times New Roman", 30))
     lb_total_confi.pack(pady=400, padx=400)
     lb_total_confi.place(x=440, y=200)
+    imagen_carga = 'imagenes/imagen_carga.png'
 
     # imagen
-    img_path = os.path.join(os.path.dirname(__file__), 'imagenes/imagen_carga.png')
+    img_path = os.path.join(os.path.dirname(__file__), imagen_carga)
     image = customtkinter.CTkImage(light_image=Image.open(img_path), size=(150, 150))
     img_label = customtkinter.CTkLabel(frame2, image=image)
     img_label.place(x=130, y=130)
