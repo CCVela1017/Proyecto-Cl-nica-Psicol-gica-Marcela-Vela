@@ -1,5 +1,4 @@
 import os.path
-import tkinter
 import customtkinter
 from PIL import Image
 
