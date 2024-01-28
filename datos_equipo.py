@@ -1,8 +1,22 @@
 import customtkinter
-
+import sqlite3
 from tkinter import ttk
 from tkinter import *
 
+
+def cargar_base_de_datos():
+    try:
+        data = []
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+        cursor.execute('SELECT * FROM objetos_de_equipo')
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row)
+            data.append(row)
+        return data
+    except Exception as ex:
+        print(ex)
 
 def front_end(frame, frame2):
 
@@ -72,8 +86,7 @@ def front_end(frame, frame2):
     my_tree.tag_configure('oddrow', background='white')
     my_tree.tag_configure('evenrow', background='lightblue')
 
-    data = [['1', 'Ejemplo1', 'Carac. Ejemplo1', 20, 18, '4D54S5'],
-            ['2', 'Ejemplo2', 'Carac. Ejemplo2', 80, 78, 'd4s5454']]
+    data = cargar_base_de_datos()
 
     global count
     count = 0
@@ -98,6 +111,7 @@ def main_window():
 
     root = customtkinter.CTk()
     root.title("Datos de Equipo")
+    root.iconbitmap('icon.ico')
     frame = customtkinter.CTkFrame(master=root)
     frame.pack(pady=20, padx=60, fill='both', expand=True)
     frame2 = customtkinter.CTkFrame(master=frame, height=200, width=20)
