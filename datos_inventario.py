@@ -2,6 +2,8 @@ import customtkinter
 import sqlite3
 from tkinter import ttk
 from tkinter import *
+from PIL import Image, ImageTk
+import os
 
 
 def cargar_base_de_datos():
@@ -17,6 +19,16 @@ def cargar_base_de_datos():
         return data
     except Exception as ex:
         print(ex)
+
+
+def add_image(frame):
+    image_path = os.path.join(os.path.dirname(__file__), 'icon.png')
+    image = customtkinter.CTkImage(light_image=Image.open(image_path), size=(100, 100))
+    image_label = customtkinter.CTkLabel(master=frame, image=image, text='')
+    image_label.place(x=800, y=10)
+
+    return
+
 
 def front_end(frame, frame2):
 
@@ -36,6 +48,12 @@ def front_end(frame, frame2):
     lb_combo = customtkinter.CTkLabel(master=frame, text='Buscar por: ', font=("Times New Roman", 20))
     lb_combo.pack(pady=400, padx=400, )
     lb_combo.place(x=300, y=10)
+
+    lb_image = customtkinter.CTkLabel(master=frame, text='Imagen:\nejemplo ', font=("Times New Roman", 20))
+    lb_image.pack(pady=400, padx=400, )
+    lb_image.place(x=700, y=10)
+
+    add_image(frame)
 
     txt_id = customtkinter.CTkEntry(master=frame, placeholder_text='Buscar')
     txt_id.pack(pady=12, padx=10)
@@ -117,7 +135,7 @@ def main_window():
     frame = customtkinter.CTkFrame(master=root)
     frame.pack(pady=20, padx=60, fill='both', expand=True)
     frame2 = customtkinter.CTkFrame(master=frame, height=200, width=20)
-    frame2.pack(pady=100, padx=10, fill='both', expand=True)
+    frame2.pack(pady=120, padx=10, fill='both', expand=True)
 
     front_end(frame, frame2)
 
