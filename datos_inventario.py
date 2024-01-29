@@ -65,21 +65,25 @@ def front_end(frame, frame2):
 
     tree_scroll.config(command=my_tree.yview)
 
-    my_tree['columns'] = ('ID', 'Nombre', 'Caracteristicas', 'Precio', 'Costo')
+    my_tree['columns'] = ('ID', 'Nombre', 'Descripción', 'Costo', 'Cantidad', 'Proveedor', 'No.Serie')
 
     my_tree.column('#0', width=0, stretch=NO)
-    my_tree.column('ID', anchor=W, stretch=NO)
+    my_tree.column('ID', anchor=W, stretch=NO, width=45)
     my_tree.column('Nombre', anchor=W, stretch=NO)
-    my_tree.column('Caracteristicas', anchor=W, stretch=NO)
-    my_tree.column('Precio', anchor=W, stretch=NO)
-    my_tree.column('Costo', anchor=W, stretch=NO)
+    my_tree.column('Descripción', anchor=W, stretch=NO)
+    my_tree.column('Costo', anchor=W, stretch=NO, width=120)
+    my_tree.column('Cantidad', anchor=W, stretch=NO, width=120)
+    my_tree.column('Proveedor', anchor=W, stretch=NO)
+    my_tree.column('No.Serie', anchor=W, stretch=NO)
 
     my_tree.heading('#0', text='', anchor=W)
     my_tree.heading('ID', text='ID', anchor=W)
     my_tree.heading('Nombre', text='Nombre', anchor=W)
-    my_tree.heading('Caracteristicas', text='Caracteristicas', anchor=W)
-    my_tree.heading('Precio', text='Precio', anchor=W)
-    my_tree.heading('Costo', text='Costo sin IVA', anchor=W)
+    my_tree.heading('Descripción', text='Descripción', anchor=W)
+    my_tree.heading('Costo', text='Costo', anchor=W)
+    my_tree.heading('Cantidad', text='Cantidad', anchor=W)
+    my_tree.heading('Proveedor', text='Proveedor', anchor=W)
+    my_tree.heading('No.Serie', text='No.Serie', anchor=W)
 
     my_tree.tag_configure('oddrow', background='white')
     my_tree.tag_configure('evenrow', background='lightblue')
@@ -93,11 +97,11 @@ def front_end(frame, frame2):
         if count % 2 == 0:
             my_tree.insert(parent='', index='end', iid=count, text='',
                            values=(record[0], record[1], record[2], record[3],
-                                   record[4]), tags=('evenrow',))
+                                   record[4], record[5]), tags=('evenrow',))
         else:
             my_tree.insert(parent='', index='end', iid=count, text='',
                            values=(record[0], record[1], record[2], record[3],
-                                   record[4]), tags=('oddrow',))
+                                   record[4], record[5]), tags=('oddrow',))
         count += 1
 
     return
