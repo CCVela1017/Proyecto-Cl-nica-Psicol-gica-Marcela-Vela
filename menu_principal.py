@@ -4,7 +4,7 @@ import os
 import datos_equipo, datos_inventario, compras
 
 root = customtkinter.CTk()
-
+#xd
 
 def add_image(frame):
     image_path = os.path.join(os.path.dirname(__file__), 'icon.png')
