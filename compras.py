@@ -1,9 +1,12 @@
 import os.path
+import tkinter
+
 import customtkinter
 from PIL import Image
 from tkinter import filedialog
 import shutil
 import os
+import sqlite3
 
 global texto_imagen
 
@@ -52,6 +55,7 @@ def main():
     def seleccionar_imagen():
         get_image = filedialog.askopenfilenames(title="SELECT IMAGE",
                                                 filetypes=(("png", "*.png"), ("jpg", "*.jpg"), ("Allfile", "*.*")))
+
         texto = str(get_image)
         texto_final = ""
         for i in range(2, len(texto) - 3):
@@ -129,8 +133,43 @@ def main():
         ib_cantidad.configure(state="disable")
         ib_num_factura.configure(state="disable")
 
+    def reset_all():
+        ib_id.delete(0, tkinter.END)
+        ib_name.delete(0, tkinter.END)
+        ib_desc.delete(0, tkinter.END)
+        ib_proveedor.delete(0, tkinter.END)
+        ib_precio.delete(0, tkinter.END)
+        ib_cantidad.delete(0, tkinter.END)
+        ib_num_factura.delete(0, tkinter.END)
+
     def confirmacion_2():
-        print("conectar base de datos")
+        source_image = f'imagenes/{texto_imagen}'
+        with open(source_image, 'rb') as archivo:
+            datos_imagen = archivo.read()
+
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+        try:
+            cursor.execute("INSERT INTO objetos_de_inventario (Nombre, "
+                           "Descripción, "
+                           "Costo, "
+                           "Cantidad, "
+                           "Proveedor, "
+                           "Serie, "
+                           "Imagen) "
+                           "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                       (ib_name.get(),
+                        ib_desc.get(),
+                        int(ib_precio.get()),
+                        int(ib_cantidad.get()),
+                        ib_proveedor.get(),
+                        ib_id.get(),
+                        sqlite3.Binary(datos_imagen)))
+        except:
+            pass
+        conexion.commit()
+        conexion.close()
+        reset_all()
 
     def editar():
         # activar input box
@@ -168,11 +207,14 @@ def main():
     return
 
 
+
+
 def cargar_datos():
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
     # root
-    ventana = customtkinter.CTk()
+    ventana = customtkinter.CTkToplevel()
+    ventana.grab_set()
     ventana.title("Compras")
     ventana.geometry('950x650')
     ventana.iconbitmap('icon.ico')
@@ -265,6 +307,3 @@ def labels_parte2(precio, cantidad, total, frame2):
                                             font=("Times New Roman", 30))
     lb_total_confi.pack(pady=400, padx=400)
     lb_total_confi.place(x=440, y=240)
-
-
-main()

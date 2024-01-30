@@ -1,11 +1,12 @@
 import customtkinter
-from PIL import Image, ImageTk
-from tkinter import ttk
-import tkinter as tk
+from PIL import Image
 import os
+import datos_equipo, datos_inventario, compras
+
+root = customtkinter.CTk()
 
 
-def add_image(frame, root):
+def add_image(frame):
     image_path = os.path.join(os.path.dirname(__file__), 'icon.png')
     image = customtkinter.CTkImage(light_image=Image.open(image_path), size=(500, 500))
     image_label = customtkinter.CTkLabel(master=frame, image=image, text='')
@@ -14,10 +15,25 @@ def add_image(frame, root):
     return
 
 
+def open_inventory():
+    datos_inventario.main_window()
+
+
+def open_equipment():
+    datos_equipo.main_window()
+
+
+def open_shop():
+    compras.main()
+
+
 def buttons(frame):
-    button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=175, width=200, font=("Arial", 20))
-    button_2 = customtkinter.CTkButton(master=frame, text='Equipo', height=175, width=200, font=("Arial", 20))
-    button_3 = customtkinter.CTkButton(master=frame, text='Compras', height=175, width=200, font=("Arial", 20))
+    button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=175, width=200, font=("Arial", 20),
+                                       command=open_inventory)
+    button_2 = customtkinter.CTkButton(master=frame, text='Equipo', height=175, width=200, font=("Arial", 20),
+                                       command=open_equipment)
+    button_3 = customtkinter.CTkButton(master=frame, text='Compras', height=175, width=200, font=("Arial", 20),
+                                       command=open_shop)
 
     button_1.pack(pady=20, padx=10)
     button_2.pack(pady=20, padx=10)
@@ -30,21 +46,17 @@ def main_window():
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
 
-    root = customtkinter.CTk()
     root.title("Menú Principal")
     root.iconbitmap('icon.ico')
     frame = customtkinter.CTkFrame(master=root)
+    root.wm_attributes("-topmost", False)
     frame.pack(pady=10, padx=10, fill='both', expand=True)
     frame2 = customtkinter.CTkFrame(master=frame, fg_color='dark gray', width=50)
     frame2.pack(pady=10, padx=10, fill='both', expand=True, side='right')
     frame3 = customtkinter.CTkFrame(master=frame)
     frame3.pack(pady=20, padx=20, fill='both', expand=True, side='left')
 
-    def presionar():
-        print('Hola')
-
-    add_image(frame3, root)
-
+    add_image(frame3)
 
     buttons(frame2)
 
