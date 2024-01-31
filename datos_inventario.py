@@ -15,7 +15,6 @@ def cargar_base_de_datos():
         cursor.execute('SELECT * FROM objetos_de_inventario')
         rows = cursor.fetchall()
         for row in rows:
-            print(row)
             data.append(row)
         return data
     except Exception as ex:

@@ -1,5 +1,5 @@
 import os.path
-import tkinter
+from tkinter import messagebox
 
 import customtkinter
 from PIL import Image
@@ -50,6 +50,21 @@ def main():
                                             width=180, height=35)
     ib_num_factura.pack(pady=100, padx=10)
     ib_num_factura.place(x=200, y=245)
+
+    lb_precio_confi = customtkinter.CTkLabel(master=frame2, text='Precio:',
+                                             font=("Times New Roman", 30))
+    lb_precio_confi.pack(pady=400, padx=400)
+    lb_precio_confi.place(x=445, y=140)
+
+    lb_cantidad_confi = customtkinter.CTkLabel(master=frame2, text='Cantidad:',
+                                               font=("Times New Roman", 30))
+    lb_cantidad_confi.pack(pady=400, padx=400)
+    lb_cantidad_confi.place(x=440, y=190)
+
+    lb_total_confi = customtkinter.CTkLabel(master=frame2, text="TOTAL:",
+                                            font=("Times New Roman", 30))
+    lb_total_confi.pack(pady=400, padx=400)
+    lb_total_confi.place(x=440, y=240)
     # buttons
 
     def seleccionar_imagen():
@@ -83,7 +98,7 @@ def main():
 
     # botones
 
-    button_select_img = customtkinter.CTkButton(master=frame, text="seleccionar", fg_color=color,
+    button_select_img = customtkinter.CTkButton(master=frame, text="Seleccionar", fg_color=color,
                                                 command=seleccionar_imagen)
     button_select_img.pack(pady=100, padx=10)
     button_select_img.place(x=260, y=207)
@@ -99,7 +114,7 @@ def main():
     # imagen
     img_path = os.path.join(os.path.dirname(__file__), imagen_carga)
     image = customtkinter.CTkImage(light_image=Image.open(img_path), size=(150, 150))
-    img_label = customtkinter.CTkLabel(frame2, image=image)
+    img_label = customtkinter.CTkLabel(frame2, image=image, text="")
     img_label.place(x=130, y=150)
 
     def confirmacion_1():
@@ -116,13 +131,17 @@ def main():
 
         # texto mostrar
         txt_mostrar = ("Codigo: " + id_code + " - Producto: " + producto + " - Descripción: " + descripcion +
-                       " - Numero de factura:" + numero_de_factura + '\n' + " - proveedor: " + proveedor)
-        labels_parte2(precio, cantidad, total, frame2)
+                       " - Numero de factura:" + numero_de_factura + '\n' + " - Proveedor: " + proveedor)
+
         # label mostrar datos
         lb_mostrar_datos.configure(text=txt_mostrar, fg_color=color)
         imagen_carga2 = 'imagenes/' + texto_imagen
         img_path2 = os.path.join(os.path.dirname(__file__), imagen_carga2)
         image.configure(light_image=Image.open(img_path2), size=(150, 150))
+
+        lb_precio_confi.configure(text=f'Precio:       Q{precio}')
+        lb_cantidad_confi.configure(text=f'Cantidad:       Q{cantidad}')
+        lb_total_confi.configure(text=f'TOTAL:      Q{total}')
 
         # desactivar input box
         ib_id.configure(state="disable")
@@ -134,13 +153,28 @@ def main():
         ib_num_factura.configure(state="disable")
 
     def reset_all():
-        ib_id.delete(0, tkinter.END)
-        ib_name.delete(0, tkinter.END)
-        ib_desc.delete(0, tkinter.END)
-        ib_proveedor.delete(0, tkinter.END)
-        ib_precio.delete(0, tkinter.END)
-        ib_cantidad.delete(0, tkinter.END)
-        ib_num_factura.delete(0, tkinter.END)
+        ib_id.configure(state="normal")
+        ib_name.configure(state="normal")
+        ib_desc.configure(state="normal")
+        ib_proveedor.configure(state="normal")
+        ib_precio.configure(state="normal")
+        ib_cantidad.configure(state="normal")
+        ib_num_factura.configure(state="normal")
+
+        ib_id.delete(0, 'end')
+        ib_name.delete(0, 'end')
+        ib_desc.delete(0, 'end')
+        ib_proveedor.delete(0, 'end')
+        ib_precio.delete(0, 'end')
+        ib_cantidad.delete(0, 'end')
+        ib_num_factura.delete(0, 'end')
+
+        lb_mostrar_datos.configure(text="", fg_color=color)
+        image.configure(light_image=Image.open(imagen_carga), size=(150, 150))
+
+        lb_precio_confi.configure(text='Precio:')
+        lb_cantidad_confi.configure(text='Cantidad:')
+        lb_total_confi.configure(text='TOTAL:')
 
     def confirmacion_2():
         source_image = f'imagenes/{texto_imagen}'
@@ -165,8 +199,15 @@ def main():
                         ib_proveedor.get(),
                         ib_id.get(),
                         sqlite3.Binary(datos_imagen)))
-        except:
-            pass
+            messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
+                                                                    'enviados correctamente a la base de datos.')
+        except Exception as ex:
+            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo'
+                                                                       'no coincide con la base de datos, verifica los '
+                                                                       'datos ingresados.')
+            reset_all()
+            print(ex)
+
         conexion.commit()
         conexion.close()
         reset_all()
@@ -207,8 +248,6 @@ def main():
     return
 
 
-
-
 def cargar_datos():
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
@@ -216,8 +255,9 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Compras")
-    ventana.geometry('950x650')
+    ventana.geometry('950x750')
     ventana.iconbitmap('icon.ico')
+
     return ventana
 
 
@@ -291,19 +331,4 @@ def labels_parte1(frame, frame2):
     lb_total_confi.place(x=440, y=240)
 
 
-def labels_parte2(precio, cantidad, total, frame2):
 
-    lb_precio_confi = customtkinter.CTkLabel(master=frame2, text='Precio:      ' + str(precio),
-                                             font=("Times New Roman", 30))
-    lb_precio_confi.pack(pady=400, padx=400)
-    lb_precio_confi.place(x=445, y=140)
-
-    lb_cantidad_confi = customtkinter.CTkLabel(master=frame2, text='Cantidad:  ' + str(cantidad),
-                                               font=("Times New Roman", 30))
-    lb_cantidad_confi.pack(pady=400, padx=400)
-    lb_cantidad_confi.place(x=440, y=190)
-
-    lb_total_confi = customtkinter.CTkLabel(master=frame2, text="TOTAL:    " + str(total),
-                                            font=("Times New Roman", 30))
-    lb_total_confi.pack(pady=400, padx=400)
-    lb_total_confi.place(x=440, y=240)
