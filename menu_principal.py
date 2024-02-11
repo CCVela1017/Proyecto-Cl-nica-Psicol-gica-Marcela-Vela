@@ -1,15 +1,20 @@
+import os
+
 import customtkinter
 from PIL import Image
-import os
-import datos_equipo, datos_inventario, compras
+
+import compras
+import datos_equipo
+import datos_inventario
+import ventas
 
 root = customtkinter.CTk()
-#xd
+
 
 def add_image(frame):
     image_path = os.path.join(os.path.dirname(__file__), 'icon.png')
     image = customtkinter.CTkImage(light_image=Image.open(image_path), size=(500, 500))
-    image_label = customtkinter.CTkLabel(master=frame, image=image, text='')
+    image_label = customtkinter.CTkLabel(master=frame, image=image)
     image_label.place(x=55, y=85)
 
     return
@@ -27,18 +32,25 @@ def open_shop():
     compras.main()
 
 
+def open_ventas():
+    ventas.main()
+
+
 def buttons(frame):
-    button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=150, width=200, font=("Arial", 20),
+    button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=100, width=150, font=("Arial", 20),
                                        command=open_inventory, fg_color="#3E4446")
-    button_2 = customtkinter.CTkButton(master=frame, text='Equipo', height=150, width=200, font=("Arial", 20),
+    button_2 = customtkinter.CTkButton(master=frame, text='Equipo', height=100, width=150, font=("Arial", 20),
                                        command=open_equipment, fg_color="#3E4446")
-    button_3 = customtkinter.CTkButton(master=frame, text='Compras', height=150, width=200, font=("Arial", 20),
+    button_3 = customtkinter.CTkButton(master=frame, text='Compras', height=100, width=150, font=("Arial", 20),
                                        command=open_shop, fg_color="#3E4446")
+
+    button_4 = customtkinter.CTkButton(master=frame, text='Ventas', height=100, width=100, font=("Arial", 20),
+                                       command=open_ventas, fg_color="#3E4446")
 
     button_1.pack(pady=34, padx=10)
     button_2.pack(pady=34, padx=10)
     button_3.pack(pady=34, padx=10)
-
+    button_4.pack(pady=34, padx=90)
     return
 
 
