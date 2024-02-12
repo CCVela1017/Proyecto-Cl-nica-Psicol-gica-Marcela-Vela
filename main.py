@@ -6,10 +6,12 @@ customtkinter.set_default_color_theme('dark-blue')
 root = customtkinter.CTk()
 root.title("Inicio de Sesión")
 root.iconbitmap('icon.ico')
-root.geometry('500*350')
+root.geometry('500*400')
+
 
 def login():
     print('Test')
+
 
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill='both', expand=True)
