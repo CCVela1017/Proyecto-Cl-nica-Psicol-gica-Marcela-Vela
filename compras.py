@@ -137,7 +137,7 @@ def main():
         lb_mostrar_datos.configure(text=txt_mostrar, fg_color=color)
         imagen_carga2 = 'imagenes/' + texto_imagen
         img_path2 = os.path.join(os.path.dirname(__file__), imagen_carga2)
-        image.configure(light_image=Image.open(img_path2), size=(150, 150))
+        image.configure(light_image=Image.open(img_path2), size=(150, 150), text="")
 
         lb_precio_confi.configure(text=f'Precio:       Q{precio}')
         lb_cantidad_confi.configure(text=f'Cantidad:       Q{cantidad}')
@@ -255,9 +255,9 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Compras")
-    ventana.geometry('950x750')
+    ventana.geometry('950x670+50x50')
     ventana.iconbitmap('icon.ico')
-
+    ventana.resizable(0, 0)
     return ventana
 
 
