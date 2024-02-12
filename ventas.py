@@ -1,4 +1,5 @@
 import customtkinter
+
 global texto_imagen
 
 
@@ -12,7 +13,12 @@ def frame1(ventana):
 def frame_2(ventana):
     frame = customtkinter.CTkFrame(master=ventana)
     frame.pack(pady=10, padx=90, fill='both', ipady=110)
+    return frame
 
+
+def frame_3(ventana):
+    frame = customtkinter.CTkFrame(master=ventana)
+    frame.pack(pady=10, padx=90, fill='both')
     return frame
 
 
@@ -20,13 +26,18 @@ def main():
     ventana = cargar_datos()
     frame = frame1(ventana)
     frame2 = frame_2(ventana)
+    frame3 = frame_3(ventana)
     color = "#3E4446"
     labels_parte1(frame)
     labels_parte2(frame2)
+    labels_parte3(frame3)
     # Variables a usar
-    cantidad_terapia_individual = 0
-    cantidad_terapia_pareja = 0
-    cantidad_orientacion_voc = 0
+    cantidad_terapia_individual: float = 0
+    cantidad_terapia_pareja: float = 0
+    cantidad_orientacion_voc: float = 0
+    sub_total: float = 0
+    descuento: float = 0
+    total: float = 0
     # IB
     ib_id = customtkinter.CTkEntry(master=frame, placeholder_text='')
     ib_id.pack(pady=12, padx=10)
@@ -65,6 +76,25 @@ def main():
     button_confirm.pack(pady=100, padx=10)
     button_confirm.place(x=550, y=310)
 
+    lb_subtotal = customtkinter.CTkLabel(master=frame3, text='Q. ' + str(sub_total),
+                                         font=("Times New Roman", 40))
+    lb_subtotal.pack(pady=400, padx=400, )
+    lb_subtotal.place(x=340, y=10)
+
+    lb_descuento = customtkinter.CTkLabel(master=frame3, text='Q. ' + str(descuento),
+                                          font=("Times New Roman", 40))
+    lb_descuento.pack(pady=400, padx=400, )
+    lb_descuento.place(x=340, y=60)
+
+    lb_total = customtkinter.CTkLabel(master=frame3, text='Q. ' + str(total),
+                                      font=("Times New Roman", 40, "bold"))
+    lb_total.pack(pady=400, padx=400, )
+    lb_total.place(x=340, y=100)
+
+    button_generate_fact = customtkinter.CTkButton(master=frame3, text="Generar Factura", fg_color=color, width=145, height=45)
+    button_generate_fact.pack(pady=100, padx=10)
+    button_generate_fact.place(x=550, y=100)
+
     ventana.mainloop()
 
     return
@@ -77,9 +107,9 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Ventas")
-    ventana.geometry('950x750')
+    ventana.geometry('950x800+50x50')
     ventana.iconbitmap('icon.ico')
-
+    ventana.resizable(0, 0)
     return ventana
 
 
@@ -139,3 +169,18 @@ def labels_parte2(frame):
                                               font=("Times New Roman", 30))
     lb_test_ansiedad.pack(pady=400, padx=400, )
     lb_test_ansiedad.place(x=10, y=260)
+
+
+def labels_parte3(frame):
+    lb_sub_total = customtkinter.CTkLabel(master=frame, text='Sub Total:  ', font=("Times New Roman", 40, "bold"))
+    lb_sub_total.pack(pady=400, padx=400, )
+    lb_sub_total.place(x=10, y=10)
+
+    lb_descuento_total = customtkinter.CTkLabel(master=frame, text='Descuento:  ', font=("Times New Roman", 40, "bold"))
+    lb_descuento_total.pack(pady=400, padx=400, )
+    lb_descuento_total.place(x=10, y=60)
+
+    lb_total = customtkinter.CTkLabel(master=frame, text='TOTAL:  ', font=("Times New Roman", 40, "bold"))
+    lb_total.pack(pady=400, padx=400, )
+    lb_total.place(x=10, y=110)
+
