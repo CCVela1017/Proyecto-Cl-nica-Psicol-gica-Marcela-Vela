@@ -4,14 +4,14 @@ global texto_imagen
 
 def frame1(ventana):
     frame = customtkinter.CTkFrame(master=ventana)
-    frame.pack(pady=10, padx=60, fill='both', ipady=0)
+    frame.pack(pady=10, padx=90, fill='both', ipady=0)
 
     return frame
 
 
 def frame_2(ventana):
     frame = customtkinter.CTkFrame(master=ventana)
-    frame.pack(pady=10, padx=60, fill='both', ipady=60)
+    frame.pack(pady=10, padx=90, fill='both', ipady=110)
 
     return frame
 
@@ -23,6 +23,10 @@ def main():
     color = "#3E4446"
     labels_parte1(frame)
     labels_parte2(frame2)
+    # Variables a usar
+    cantidad_terapia_individual = 0
+    cantidad_terapia_pareja = 0
+    cantidad_orientacion_voc = 0
     # IB
     ib_id = customtkinter.CTkEntry(master=frame, placeholder_text='')
     ib_id.pack(pady=12, padx=10)
@@ -35,12 +39,31 @@ def main():
     ib_nit = customtkinter.CTkEntry(master=frame, placeholder_text='NIT del cliente')
     ib_nit.pack(pady=12, padx=10)
     ib_nit.place(x=60, y=145)
+    # IB PARTE 2
 
-    cb_servicio = customtkinter.CTkComboBox(master=frame2, font=("Times New Roman", 20),
-                                            values=['Terapia Individual', 'Terapia de Pareja',
-                                                    'Orientación Vocacional'], width=400)
-    cb_servicio.pack(pady=400, padx=400, )
-    cb_servicio.place(x=125, y=15)
+    ib_terapia_indiv = customtkinter.CTkEntry(master=frame2, placeholder_text='')
+    ib_terapia_indiv.pack(pady=12, padx=10)
+    ib_terapia_indiv.place(x=550, y=65)
+
+    ib_terapia_pareja = customtkinter.CTkEntry(master=frame2, placeholder_text='')
+    ib_terapia_pareja.pack(pady=12, padx=10)
+    ib_terapia_pareja.place(x=550, y=110)
+
+    ib_pruebas_orientacion = customtkinter.CTkEntry(master=frame2, placeholder_text='')
+    ib_pruebas_orientacion.pack(pady=12, padx=10)
+    ib_pruebas_orientacion.place(x=550, y=160)
+
+    ib_prueba_iq = customtkinter.CTkEntry(master=frame2, placeholder_text='')
+    ib_prueba_iq.pack(pady=12, padx=10)
+    ib_prueba_iq.place(x=550, y=215)
+
+    ib_test_ansiedad = customtkinter.CTkEntry(master=frame2, placeholder_text='')
+    ib_test_ansiedad.pack(pady=12, padx=10)
+    ib_test_ansiedad.place(x=550, y=265)
+
+    button_confirm = customtkinter.CTkButton(master=frame2, text="Confirmar", fg_color=color, width=145, height=45)
+    button_confirm.pack(pady=100, padx=10)
+    button_confirm.place(x=550, y=310)
 
     ventana.mainloop()
 
@@ -86,5 +109,33 @@ def labels_parte2(frame):
 
     lb_costo_ser = customtkinter.CTkLabel(master=frame, text='Costo: ', font=("Times New Roman", 30, "bold"))
     lb_costo_ser.pack(pady=400, padx=400, )
-    lb_costo_ser.place(x=570, y=10)
+    lb_costo_ser.place(x=340, y=10)
 
+    lb_cantidad = customtkinter.CTkLabel(master=frame, text='Cantidad: ', font=("Times New Roman", 30, "bold"))
+    lb_cantidad.pack(pady=400, padx=400, )
+    lb_cantidad.place(x=550, y=10)
+
+    lb_terapia_ind = customtkinter.CTkLabel(master=frame, text='Terapia Individual             Q. 150.00',
+                                            font=("Times New Roman", 30))
+    lb_terapia_ind.pack(pady=400, padx=400, )
+    lb_terapia_ind.place(x=10, y=60)
+
+    lb_terapia_pareja = customtkinter.CTkLabel(master=frame, text='Terapia de Pareja              Q. 200.00  ',
+                                               font=("Times New Roman", 30))
+    lb_terapia_pareja.pack(pady=400, padx=400, )
+    lb_terapia_pareja.place(x=10, y=110)
+
+    lb_orientacion_voc = customtkinter.CTkLabel(master=frame, text='Orientación Vocacional     Q.  250.00',
+                                                font=("Times New Roman", 30))
+    lb_orientacion_voc.pack(pady=400, padx=400, )
+    lb_orientacion_voc.place(x=10, y=160)
+
+    lb_pruebas_de_iq = customtkinter.CTkLabel(master=frame, text='Pruebas de IQ                   Q.  150.00',
+                                              font=("Times New Roman", 30))
+    lb_pruebas_de_iq.pack(pady=400, padx=400, )
+    lb_pruebas_de_iq.place(x=10, y=210)
+
+    lb_test_ansiedad = customtkinter.CTkLabel(master=frame, text='Test de ansiedad                Q.  150.00',
+                                              font=("Times New Roman", 30))
+    lb_test_ansiedad.pack(pady=400, padx=400, )
+    lb_test_ansiedad.place(x=10, y=260)
