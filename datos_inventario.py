@@ -12,7 +12,7 @@ def cargar_base_de_datos():
         data = []
         conexion = sqlite3.connect('src/database')
         cursor = conexion.cursor()
-        cursor.execute('SELECT * FROM objetos_de_inventario')
+        cursor.execute('SELECT * FROM objetos_de_inventario WHERE servicio = 0')
         rows = cursor.fetchall()
         for row in rows:
             data.append(row)
