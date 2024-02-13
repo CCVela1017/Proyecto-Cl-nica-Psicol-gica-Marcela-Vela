@@ -1,3 +1,4 @@
+import random
 from tkinter import ttk
 from tkinter import *
 import customtkinter
@@ -67,29 +68,35 @@ def labels_parte1(frame):
     lb_no_fac.pack(pady=400, padx=400, )
     lb_no_fac.place(x=10, y=60)
 
-    entry_no_fac = customtkinter.CTkEntry(master=frame, font=("Times New Roman", 30))
+    no_fac = str(random.randint(1, 1000))
+    entry_no_fac = customtkinter.CTkEntry(master=frame, font=("Times New Roman", 15))
     entry_no_fac.pack(pady=400, padx=400, )
-    entry_no_fac.place(x=175, y=60)
+    entry_no_fac.place(x=175, y=64)
+    entry_no_fac.insert(0, no_fac)
+    entry_no_fac.configure(state="disable")
 
     lb_name = customtkinter.CTkLabel(master=frame, text='Nombre', font=("Times New Roman", 30))
     lb_name.pack(pady=400, padx=400, )
     lb_name.place(x=10, y=103)
 
-    entry_name = customtkinter.CTkEntry(master=frame, font=("Times New Roman", 30))
+    entry_name = customtkinter.CTkEntry(master=frame, font=("Times New Roman", 15)
+                                        , placeholder_text='Ingrese el Nombre.')
     entry_name.pack(pady=400, padx=400, )
-    entry_name.place(x=175, y=103)
+    entry_name.place(x=175, y=107)
 
     lb_nit = customtkinter.CTkLabel(master=frame, text='Nit', font=("Times New Roman", 30))
     lb_nit.pack(pady=400, padx=400, )
     lb_nit.place(x=10, y=145)
 
-    entry_nit = customtkinter.CTkEntry(master=frame, font=("Times New Roman", 30))
+    entry_nit = customtkinter.CTkEntry(master=frame, font=("Times New Roman", 15),
+                                       placeholder_text='Ingrese NIT.')
     entry_nit.pack(pady=400, padx=400, )
-    entry_nit.place(x=175, y=145)
+    entry_nit.place(x=175, y=149)
 
-    confirm_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Confirmar cliente', height=90)
+    confirm_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Confirmar cliente',
+                                             height=40)
     confirm_button.pack(pady=400, padx=400, )
-    confirm_button.place(x=350, y=75)
+    confirm_button.place(x=350, y=100)
 
 
 def labels_parte2(frame):
@@ -102,6 +109,8 @@ def labels_parte2(frame):
     for row in rows:
         data_.append(row[0])
 
+    conexion.close()
+
     lb_servicio = customtkinter.CTkLabel(master=frame, text='Servicios: ', font=("Times New Roman", 40, "bold"))
     lb_servicio.pack(pady=400, padx=400, )
     lb_servicio.place(x=10, y=10)
@@ -110,7 +119,7 @@ def labels_parte2(frame):
     lb_insumos.pack(pady=400, padx=400, )
     lb_insumos.place(x=10, y=100)
 
-    lb_insumos2 = customtkinter.CTkLabel(master=frame, text='Insumos utilizados: ', font=("Times New Roman", 40, "bold"))
+    lb_insumos2 = customtkinter.CTkLabel(master=frame, text='Vista Previa: ', font=("Times New Roman", 40, "bold"))
     lb_insumos2.pack(pady=400, padx=400, )
     lb_insumos2.place(x=680, y=10)
 
@@ -118,7 +127,30 @@ def labels_parte2(frame):
     combo_box.pack(pady=400, padx=400)
     combo_box.place(x=50, y=70)
 
-    boton_add = customtkinter.CTkButton(master=frame,  text='Añadir servicio', font=("Times New Roman", 12, "bold"))
+    def get_service():
+
+        global count2
+        data_u = []
+        conexion_u = sqlite3.connect('src/database')
+        cursor_u = conexion.cursor()
+        cursor_u.execute(f'SELECT Nombre, Descripción, costo_uni FROM objetos_de_inventario WHERE Nombre = "{str(combo_box.get())}"')
+        rows_ = cursor_u.fetchall()
+        for r in rows_:
+            data_u.append(r)
+
+        conexion_u.close()
+
+        for record_ in data_u:
+            if count2 % 2 == 0:
+                my_tree.insert(parent='', index='end', iid=count2, text='',
+                               values=(record_[0], record_[1]), tags=('evenrow',))
+            else:
+                my_tree.insert(parent='', index='end', iid=count2, text='',
+                               values=(record_[0], record_[1]), tags=('oddrow',))
+            count2 += 1
+
+    boton_add = customtkinter.CTkButton(master=frame,  text='Añadir servicio', font=("Times New Roman", 12, "bold")
+                                        , command=get_service)
     boton_add.pack(pady=400, padx=400)
     boton_add.place(x=310, y=70)
 
@@ -206,7 +238,7 @@ def labels_parte2(frame):
 
     tree_frame = Frame(frame)
     tree_frame.pack(pady=70)
-    tree_frame.place(x=850, y=100)
+    tree_frame.place(x=850, y=80)
 
     tree_scroll = Scrollbar(tree_frame)
     tree_scroll.pack(side=RIGHT, fill=Y)
@@ -231,32 +263,6 @@ def labels_parte2(frame):
 
     # EVENTO CUANDO SE ESCRIBE EN EL TEXT BOX
 
-    data2 = []
-
-    count = 0
-
-    for record in data2:
-        if count % 2 == 0:
-            my_tree.insert(parent='', index='end', iid=count, text='',
-                           values=(record[0], record[1]), tags=('evenrow',))
-        else:
-            my_tree.insert(parent='', index='end', iid=count, text='',
-                           values=(record[0], record[1]), tags=('oddrow',))
-        count += 1
-
-
-def cargar_base_de_datos(argumento: str):
-    try:
-        data = []
-        conexion = sqlite3.connect('src/database')
-        cursor = conexion.cursor()
-        cursor.execute(str(argumento))
-        rows = cursor.fetchall()
-        for row in rows:
-            data.append(row)
-        return data
-    except Exception as ex:
-        print(ex)
 
 
 def labels_parte3(frame):
