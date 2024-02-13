@@ -52,7 +52,7 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Ventas")
-    ventana.geometry('1690x800+50x50')
+    ventana.geometry('1270x800+50x50')
     ventana.iconbitmap('icon.ico')
     return ventana
 
@@ -87,6 +87,10 @@ def labels_parte1(frame):
     entry_nit.pack(pady=400, padx=400, )
     entry_nit.place(x=175, y=145)
 
+    confirm_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Confirmar cliente', height=90)
+    confirm_button.pack(pady=400, padx=400, )
+    confirm_button.place(x=350, y=75)
+
 
 def labels_parte2(frame):
 
@@ -108,7 +112,7 @@ def labels_parte2(frame):
 
     lb_insumos2 = customtkinter.CTkLabel(master=frame, text='Insumos utilizados: ', font=("Times New Roman", 40, "bold"))
     lb_insumos2.pack(pady=400, padx=400, )
-    lb_insumos2.place(x=850, y=10)
+    lb_insumos2.place(x=680, y=10)
 
     combo_box = customtkinter.CTkComboBox(master=frame, values=data_, width=250)
     combo_box.pack(pady=400, padx=400)
@@ -120,7 +124,7 @@ def labels_parte2(frame):
 
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55)
     boton_add2.pack(pady=400, padx=400)
-    boton_add2.place(x=750, y=160)
+    boton_add2.place(x=595, y=160)
 
     style = ttk.Style()
     style.theme_use('default')
@@ -137,7 +141,7 @@ def labels_parte2(frame):
 
     tree_frame = Frame(frame)
     tree_frame.pack(pady=70)
-    tree_frame.place(x=70, y=160)
+    tree_frame.place(x=70, y=200)
 
     tree_scroll = Scrollbar(tree_frame)
     tree_scroll.pack(side=RIGHT, fill=Y)
@@ -267,3 +271,11 @@ def labels_parte3(frame):
     lb_total = customtkinter.CTkLabel(master=frame, text='TOTAL:  ', font=("Times New Roman", 40, "bold"))
     lb_total.pack(pady=400, padx=400, )
     lb_total.place(x=10, y=110)
+
+    factura_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Facturar', height=100)
+    factura_button.pack(pady=400, padx=400, )
+    factura_button.place(x=870, y=45)
+
+    cotizar_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Cotizar', height=100)
+    cotizar_button.pack(pady=400, padx=400, )
+    cotizar_button.place(x=700, y=45)
