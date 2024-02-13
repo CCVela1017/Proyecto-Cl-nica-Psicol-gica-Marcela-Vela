@@ -44,7 +44,7 @@ def buttons(frame):
     button_3 = customtkinter.CTkButton(master=frame, text='Compras', height=100, width=150, font=("Arial", 20),
                                        command=open_shop, fg_color="#3E4446")
 
-    button_4 = customtkinter.CTkButton(master=frame, text='Ventas', height=100, width=100, font=("Arial", 20),
+    button_4 = customtkinter.CTkButton(master=frame, text='Ventas', height=100, width=150, font=("Arial", 20),
                                        command=open_ventas, fg_color="#3E4446")
 
     button_1.pack(pady=34, padx=10)
