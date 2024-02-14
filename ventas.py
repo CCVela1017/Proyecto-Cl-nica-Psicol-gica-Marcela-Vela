@@ -162,6 +162,7 @@ def labels_parte2(frame):
     def get_service_2():
         nombre = select_record()
         cantidad = 1
+
         my_tree.insert('', 'end', values=(nombre, cantidad))
 
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55,
