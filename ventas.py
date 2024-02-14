@@ -1,10 +1,9 @@
 import random
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from tkinter import *
 import customtkinter
 import sqlite3
 from bill import Bill
-
 global texto_imagen
 global lista_sumatoria
 global name
@@ -185,7 +184,7 @@ def labels_parte2(frame, frame_3):
         print(total)
         my_tree.insert('', 'end', values=(servicio, cantidad, precio_1, total))
 
-    boton_add = customtkinter.CTkButton(master=frame,  text='Añadir servicio', font=("Times New Roman", 12, "bold")
+    boton_add = customtkinter.CTkButton(master=frame, text='Añadir servicio', font=("Times New Roman", 12, "bold")
                                         , command=get_service)
     boton_add.pack(pady=400, padx=400)
     boton_add.place(x=510, y=70)
@@ -263,12 +262,12 @@ def labels_parte2(frame, frame_3):
     for record in data_:
         if count % 2 == 0:
             my_tree_2.insert(parent='', index='end', iid=count, text='',
-                           values=(record[0], record[1], str(record[2]) + ' unidades'
-                                   , str(record[3])), tags=('evenrow',))
+                             values=(record[0], record[1], str(record[2]) + ' unidades'
+                                     , str(record[3])), tags=('evenrow',))
         else:
             my_tree_2.insert(parent='', index='end', iid=count, text='',
-                           values=(record[0], record[1], str(record[2]) + ' unidades'
-                                   , str(record[3])), tags=('oddrow',))
+                             values=(record[0], record[1], str(record[2]) + ' unidades'
+                                     , str(record[3])), tags=('oddrow',))
         count += 1
 
     style = ttk.Style()
@@ -328,7 +327,6 @@ def labels_parte2(frame, frame_3):
             cantidad = my_tree.item(item, "values")[1]
             nombre_list = my_tree.item(item, "values")[0]
             monto_list = float(my_tree.item(item, "values")[3])
-            print(cantidad, nombre_list, monto_list)
             lista.append(cantidad)
             lista.append(nombre_list)
             lista.append(monto_list)
@@ -336,19 +334,46 @@ def labels_parte2(frame, frame_3):
         columna1 = obtener_columna(3)
         sub_total = 0
         descuento = 0
+
+        for rows_ in matriz:
+            nombre = rows_[1]
+            conexion_ = sqlite3.connect('src/database')
+            cursor_ = conexion_.cursor()
+            cursor_.execute(f'SELECT Cantidad FROM objetos_de_inventario WHERE Nombre = "{nombre}" and servicio = 0')
+            try:
+                existencias_actuales = cursor_.fetchone()[0]
+                cursor_.close()
+                if existencias_actuales > 0:
+                    existencias_actuales -= 1
+            except TypeError:
+                cursor_.close()
+                continue
+
+            print(existencias_actuales)
+            print(nombre)
+
+            cursor_2 = conexion_.cursor()
+            cursor_2.execute(f'UPDATE objetos_de_inventario SET Cantidad = {existencias_actuales} WHERE Nombre = "{nombre}" and servicio = 0')
+            conexion_.commit()
+            cursor_2.close()
+            conexion_.close()
+
         for i in columna1:
             sub_total += float(i)
 
         total_final = sub_total - descuento
-        label_subtotal = customtkinter.CTkLabel(master=frame_3, text=str(sub_total), font=("Times New Roman", 40, "bold"))
+        label_subtotal = customtkinter.CTkLabel(master=frame_3, text=str(sub_total),
+                                                font=("Times New Roman", 40, "bold"))
         label_subtotal.pack(pady=400, padx=400, )
         label_subtotal.place(x=300, y=10)
 
-        label_descuento = customtkinter.CTkLabel(master=frame_3, text=str(descuento), font=("Times New Roman", 40, "bold"))
+        label_descuento = customtkinter.CTkLabel(master=frame_3, text=str(descuento),
+                                                 font=("Times New Roman", 40, "bold"))
         label_descuento.pack(pady=400, padx=400, )
         label_descuento.place(x=300, y=60)
 
-        label_total = customtkinter.CTkLabel(master=frame_3, text=str(total_final), font=("Times New Roman", 40, "bold"))
+        label_total = customtkinter.CTkLabel(master=frame_3, text=str(total_final),
+                                             font=("Times New Roman", 40, "bold"))
         label_total.pack(pady=400, padx=400, )
         label_total.place(x=300, y=110)
 
@@ -364,7 +389,6 @@ def labels_parte2(frame, frame_3):
 
 
 def labels_parte3(frame):
-
     lb_sub_total = customtkinter.CTkLabel(master=frame, text='Sub Total:  ', font=("Times New Roman", 40, "bold"))
     lb_sub_total.pack(pady=400, padx=400, )
     lb_sub_total.place(x=10, y=10)
@@ -378,6 +402,7 @@ def labels_parte3(frame):
     lb_total.place(x=10, y=110)
 
     def facturacion():
+
         global name
         global nit
         global matriz
@@ -391,6 +416,8 @@ def labels_parte3(frame):
             'dir': str(direccion)
         }
 
+        messagebox.showinfo('Instrucción', 'Si desea generar otra factura, recomendamos cerrar la ventana.')
+
         bill = Bill(cliente, matriz)
         bill.print_bill()
 
@@ -403,5 +430,3 @@ def labels_parte3(frame):
                                              command=facturacion)
     cotizar_button.pack(pady=400, padx=400, )
     cotizar_button.place(x=700, y=45)
-
-
