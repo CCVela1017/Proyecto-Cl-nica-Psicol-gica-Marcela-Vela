@@ -54,6 +54,7 @@ def cargar_datos():
     ventana.grab_set()
     ventana.title("Ventas")
     ventana.geometry('1270x800+50x50')
+    ventana.resizable(0, 0)
     ventana.iconbitmap('icon.ico')
     return ventana
 
