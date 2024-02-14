@@ -4,6 +4,7 @@ from tkinter import *
 import customtkinter
 import sqlite3
 global texto_imagen
+global lista_sumatoria
 
 
 def frame1(ventana):
@@ -32,7 +33,7 @@ def main():
     frame2 = frame_2(ventana)
     frame3 = frame_3(ventana)
     labels_parte1(frame)
-    labels_parte2(frame2)
+    labels_parte2(frame2, frame3)
     labels_parte3(frame3)
     # Variables a usar
     # IB
@@ -107,7 +108,7 @@ def labels_parte1(frame):
     confirm_button.place(x=350, y=140)
 
 
-def labels_parte2(frame):
+def labels_parte2(frame, frame_3):
     # selected record
     def select_record(tipo):
         selected = my_tree_2.focus()
@@ -177,8 +178,9 @@ def labels_parte2(frame):
     def get_service_2():
         nombre = select_record(1)
         cantidad = 1
-        precio = select_record(2)
-        my_tree.insert('', 'end', values=(nombre, cantidad, precio))
+        precio = int(select_record(2))
+        total = precio * cantidad
+        my_tree.insert('', 'end', values=(nombre, cantidad, precio, total))
 
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55,
                                          command=get_service_2)
@@ -243,11 +245,11 @@ def labels_parte2(frame):
         if count % 2 == 0:
             my_tree_2.insert(parent='', index='end', iid=count, text='',
                            values=(record[0], record[1], str(record[2]) + ' unidades'
-                                   , 'Q' + str(record[3])), tags=('evenrow',))
+                                   , str(record[3])), tags=('evenrow',))
         else:
             my_tree_2.insert(parent='', index='end', iid=count, text='',
                            values=(record[0], record[1], str(record[2]) + ' unidades'
-                                   , 'Q' + str(record[3])), tags=('oddrow',))
+                                   , str(record[3])), tags=('oddrow',))
         count += 1
 
     style = ttk.Style()
@@ -292,10 +294,40 @@ def labels_parte2(frame):
     my_tree.tag_configure('oddrow', background='white')
     my_tree.tag_configure('evenrow', background='lightblue')
 
-    # EVENTO CUANDO SE ESCRIBE EN EL TEXT BOX
+    def obtener_columna(columna):
+        valores_columna = []
+        for item in my_tree.get_children():
+            valor = my_tree.item(item, "values")[columna]
+            valores_columna.append(valor)
+        return valores_columna
+
+    def generar_matriz():
+        columna1 = obtener_columna(3)
+        sub_total = 0
+        descuento = 0
+        for i in columna1:
+            sub_total += int(i)
+        total_final = sub_total - descuento
+        label_subtotal = customtkinter.CTkLabel(master=frame_3, text=str(sub_total), font=("Times New Roman", 40, "bold"))
+        label_subtotal.pack(pady=400, padx=400, )
+        label_subtotal.place(x=300, y=10)
+
+        label_descuento = customtkinter.CTkLabel(master=frame_3, text=str(descuento), font=("Times New Roman", 40, "bold"))
+        label_descuento.pack(pady=400, padx=400, )
+        label_descuento.place(x=300, y=60)
+
+        label_total = customtkinter.CTkLabel(master=frame_3, text=str(total_final), font=("Times New Roman", 40, "bold"))
+        label_total.pack(pady=400, padx=400, )
+        label_total.place(x=300, y=110)
+
+    button_generar = customtkinter.CTkButton(master=frame, text='CONFIRMAR', font=("Times New Roman", 30, "bold"),
+                                             width=15, command=generar_matriz)
+    button_generar.pack(pady=12, padx=10)
+    button_generar.place(x=680, y=300)
 
 
 def labels_parte3(frame):
+
     lb_sub_total = customtkinter.CTkLabel(master=frame, text='Sub Total:  ', font=("Times New Roman", 40, "bold"))
     lb_sub_total.pack(pady=400, padx=400, )
     lb_sub_total.place(x=10, y=10)
