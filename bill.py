@@ -72,23 +72,6 @@ class Bill:
             fila.cell('Q' + str(self.total), colspan=1)
             # Agrego una fila para mostrar la fecha de compra
             fila = tabla.row()
-            fila.cell(f'Fecha de generación: {datetime.datetime.now()}', colspan=3)
+            fila.cell(f'Fecha de generación: {datetime.datetime.today().date()}', colspan=3)
         # Genero factura en un pdf
         pdf.output(f'factura{self.bill_num}.pdf')
-
-
-# Cliente de ejemplo
-cliente = {
-    'name': 'Carlos Vela',
-    'nit': '16864213'
-}
-
-# Servicios de ejemplo
-servicios = [
-    [2, 'Pruebas de IQ', 500],
-    [1, 'Prueba vocacional', 250]
-]
-
-# Creo y genero la factura
-bill = Bill(cliente, servicios)
-bill.print_bill()

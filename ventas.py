@@ -3,8 +3,15 @@ from tkinter import ttk
 from tkinter import *
 import customtkinter
 import sqlite3
+from bill import Bill
+
 global texto_imagen
 global lista_sumatoria
+global name
+global direccion
+global nit
+global no_factura
+global matriz
 
 
 def frame1(ventana):
@@ -102,8 +109,21 @@ def labels_parte1(frame):
     entry_dress.pack(pady=400, padx=400, )
     entry_dress.place(x=480, y=65)
 
+    def mandar_datos():
+        global name
+        name = entry_name.get()
+
+        global direccion
+        direccion = entry_dress.get()
+
+        global nit
+        nit = entry_nit.get()
+
+        global no_factura
+        no_factura = entry_no_fac.get()
+
     confirm_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Confirmar cliente',
-                                             height=40)
+                                             height=40, command=mandar_datos)
     confirm_button.pack(pady=400, padx=400, )
     confirm_button.place(x=350, y=140)
 
@@ -150,7 +170,7 @@ def labels_parte2(frame, frame_3):
 
     def get_service():
         servicio = str(combo_box.get())
-        cantidad = int(ib_cantidad.get())
+        cantidad = float(ib_cantidad.get())
         if servicio == "Prueba de Orientación Vocacional":
             precio_1 = 250
         elif servicio == "Terapia Individual":
@@ -177,7 +197,7 @@ def labels_parte2(frame, frame_3):
     def get_service_2():
         nombre = select_record(1)
         cantidad = 1
-        precio = int(select_record(2))
+        precio = float(select_record(2))
         total = precio * cantidad
         my_tree.insert('', 'end', values=(nombre, cantidad, precio, total))
 
@@ -301,11 +321,24 @@ def labels_parte2(frame, frame_3):
         return valores_columna
 
     def generar_matriz():
+        global matriz
+        matriz = []
+        for item in my_tree.get_children():
+            lista = []
+            cantidad = my_tree.item(item, "values")[1]
+            nombre_list = my_tree.item(item, "values")[0]
+            monto_list = float(my_tree.item(item, "values")[3])
+            print(cantidad, nombre_list, monto_list)
+            lista.append(cantidad)
+            lista.append(nombre_list)
+            lista.append(monto_list)
+            matriz.append(lista)
         columna1 = obtener_columna(3)
         sub_total = 0
         descuento = 0
         for i in columna1:
-            sub_total += int(i)
+            sub_total += float(i)
+
         total_final = sub_total - descuento
         label_subtotal = customtkinter.CTkLabel(master=frame_3, text=str(sub_total), font=("Times New Roman", 40, "bold"))
         label_subtotal.pack(pady=400, padx=400, )
@@ -325,12 +358,9 @@ def labels_parte2(frame, frame_3):
     button_generar.place(x=680, y=300)
 
     def factura():
-        pass
 
         def base_de_datos():
-
             pass
-
 
 
 def labels_parte3(frame):
@@ -347,10 +377,29 @@ def labels_parte3(frame):
     lb_total.pack(pady=400, padx=400, )
     lb_total.place(x=10, y=110)
 
-    factura_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Facturar', height=100)
+    def facturacion():
+        global name
+        global nit
+        global matriz
+        print(name)
+        print(nit)
+
+        cliente = {
+            'name': str(name),
+            'nit': str(nit)
+        }
+
+        bill = Bill(cliente, matriz)
+        bill.print_bill()
+
+    factura_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Facturar', height=100,
+                                             command=facturacion)
     factura_button.pack(pady=400, padx=400, )
     factura_button.place(x=870, y=45)
 
-    cotizar_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Cotizar', height=100)
+    cotizar_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Cotizar', height=100,
+                                             command=facturacion)
     cotizar_button.pack(pady=400, padx=400, )
     cotizar_button.place(x=700, y=45)
+
+
