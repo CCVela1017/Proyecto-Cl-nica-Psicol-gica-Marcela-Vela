@@ -54,7 +54,6 @@ def cargar_datos():
     ventana.grab_set()
     ventana.title("Ventas")
     ventana.geometry('1270x800+50x50')
-    ventana.resizable(0, 0)
     ventana.iconbitmap('icon.ico')
     return ventana
 
@@ -118,7 +117,6 @@ def labels_parte2(frame, frame_3):
             return values[0]
         elif tipo == 2:
             return values[3]
-
 
     data_ = []
     conexion = sqlite3.connect('src/database')
@@ -325,6 +323,14 @@ def labels_parte2(frame, frame_3):
                                              width=15, command=generar_matriz)
     button_generar.pack(pady=12, padx=10)
     button_generar.place(x=680, y=300)
+
+    def factura():
+        pass
+
+        def base_de_datos():
+
+            pass
+
 
 
 def labels_parte3(frame):
