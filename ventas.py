@@ -107,8 +107,13 @@ def labels_parte1(frame):
     confirm_button.place(x=350, y=140)
 
 
-
 def labels_parte2(frame):
+    # selected record
+    def select_record():
+        selected = my_tree_2.focus()
+        values = my_tree_2.item(selected, 'values')
+        return values[0]
+
 
     data_ = []
     conexion = sqlite3.connect('src/database')
@@ -155,12 +160,9 @@ def labels_parte2(frame):
     ib_cantidad.place(x=315, y=70)
 
     def get_service_2():
-        def obtener_valor():
-            item = my_tree_2.selection()[0]  # Obtener el ítem seleccionado
-            valor = my_tree_2.item(item, "values")  # Obtener los valores asociados con el ítem
-            print("Valor clickeado:", valor)
-
-        my_tree_2.bind("<ButtonRelease-1>", obtener_valor)
+        nombre = select_record()
+        cantidad = 1
+        my_tree.insert('', 'end', values=(nombre, cantidad))
 
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55,
                                          command=get_service_2)
