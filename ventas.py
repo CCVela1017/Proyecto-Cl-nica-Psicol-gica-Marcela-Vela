@@ -109,10 +109,13 @@ def labels_parte1(frame):
 
 def labels_parte2(frame):
     # selected record
-    def select_record():
+    def select_record(tipo):
         selected = my_tree_2.focus()
         values = my_tree_2.item(selected, 'values')
-        return values[0]
+        if tipo == 1:
+            return values[0]
+        elif tipo == 2:
+            return values[3]
 
 
     data_ = []
@@ -160,7 +163,7 @@ def labels_parte2(frame):
             precio_1 = 150
         total = precio_1 * cantidad
         print(total)
-        my_tree.insert('', 'end', values=(servicio, cantidad, precio_1))
+        my_tree.insert('', 'end', values=(servicio, cantidad, precio_1, total))
 
     boton_add = customtkinter.CTkButton(master=frame,  text='Añadir servicio', font=("Times New Roman", 12, "bold")
                                         , command=get_service)
@@ -172,9 +175,10 @@ def labels_parte2(frame):
     ib_cantidad.place(x=315, y=70)
 
     def get_service_2():
-        nombre = select_record()
+        nombre = select_record(1)
         cantidad = 1
-        my_tree.insert('', 'end', values=(nombre, cantidad))
+        precio = select_record(2)
+        my_tree.insert('', 'end', values=(nombre, cantidad, precio))
 
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55,
                                          command=get_service_2)
@@ -271,17 +275,19 @@ def labels_parte2(frame):
 
     tree_scroll.config(command=my_tree.yview)
 
-    my_tree['columns'] = ('Nombre', 'Cantidad', 'Precio')
+    my_tree['columns'] = ('Nombre', 'Cantidad', 'Precio', 'Total')
 
     my_tree.column('#0', width=0, stretch=NO)
     my_tree.column('Nombre', anchor=W, stretch=NO)
-    my_tree.column('Cantidad', anchor=W)
-    my_tree.column('Precio', anchor=W)
+    my_tree.column('Cantidad', anchor=W, width=75)
+    my_tree.column('Precio', anchor=W, width=125)
+    my_tree.column('Total', anchor=W, width=125)
 
     my_tree.heading('#0', text='', anchor=W)
     my_tree.heading('Nombre', text='Nombre', anchor=W)
     my_tree.heading('Cantidad', text='Cantidad', anchor=W)
     my_tree.heading('Precio', text='Precio', anchor=W)
+    my_tree.heading('Total', text='Total', anchor=W)
 
     my_tree.tag_configure('oddrow', background='white')
     my_tree.tag_configure('evenrow', background='lightblue')
