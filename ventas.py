@@ -147,8 +147,20 @@ def labels_parte2(frame):
 
     def get_service():
         servicio = str(combo_box.get())
-        cantidad = str(ib_cantidad.get())
-        my_tree.insert('', 'end', values=(servicio, cantidad))
+        cantidad = int(ib_cantidad.get())
+        if servicio == "Prueba de Orientación Vocacional":
+            precio_1 = 250
+        elif servicio == "Terapia Individual":
+            precio_1 = 150
+        elif servicio == "Terapia de Pareja":
+            precio_1 = 200
+        elif servicio == "Pruebas de IQ":
+            precio_1 = 150
+        elif servicio == "Test de Ansiedad STAI":
+            precio_1 = 150
+        total = precio_1 * cantidad
+        print(total)
+        my_tree.insert('', 'end', values=(servicio, cantidad, precio_1))
 
     boton_add = customtkinter.CTkButton(master=frame,  text='Añadir servicio', font=("Times New Roman", 12, "bold")
                                         , command=get_service)
@@ -162,7 +174,6 @@ def labels_parte2(frame):
     def get_service_2():
         nombre = select_record()
         cantidad = 1
-
         my_tree.insert('', 'end', values=(nombre, cantidad))
 
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55,
@@ -260,22 +271,22 @@ def labels_parte2(frame):
 
     tree_scroll.config(command=my_tree.yview)
 
-    my_tree['columns'] = ('Nombre', 'Cantidad')
+    my_tree['columns'] = ('Nombre', 'Cantidad', 'Precio')
 
     my_tree.column('#0', width=0, stretch=NO)
     my_tree.column('Nombre', anchor=W, stretch=NO)
     my_tree.column('Cantidad', anchor=W)
+    my_tree.column('Precio', anchor=W)
 
     my_tree.heading('#0', text='', anchor=W)
     my_tree.heading('Nombre', text='Nombre', anchor=W)
     my_tree.heading('Cantidad', text='Cantidad', anchor=W)
-
+    my_tree.heading('Precio', text='Precio', anchor=W)
 
     my_tree.tag_configure('oddrow', background='white')
     my_tree.tag_configure('evenrow', background='lightblue')
 
     # EVENTO CUANDO SE ESCRIBE EN EL TEXT BOX
-
 
 
 def labels_parte3(frame):
