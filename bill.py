@@ -6,7 +6,7 @@ import datetime
 # Diccionario para el membrete
 
 letterhead = {
-    'Name': 'Clínica Psicológica Marcela Vela',
+    'Name': 'CLINICA PSICOLÓGICA MARCELA VELA',
     'Nit': '16846212',
     'Dirección': 'Centro Médico de Occidente, Calle "A" 19-46, zona 3., Quetzaltenango, Guatemala'
 }
@@ -27,11 +27,11 @@ class Bill:
         pdf.add_page()
 
         # Titulo de la factura
-        pdf.cell(40, 10, 'Factura', ln=1)
+        pdf.cell(40, 10, f'FACTURA NO.{self.customer["no"]}', ln=1)
 
         # Membrete
         # ln = salto de linea
-        pdf.cell(40, 10, f'Nombre: {letterhead["Name"]}', ln=1)
+        pdf.cell(40, 10, f'{letterhead["Name"]}', ln=1)
         pdf.cell(40, 10, f'Nit: {letterhead["Nit"]}', ln=1)
         pdf.cell(40, 10, f'Dirección: {letterhead["Dirección"]}', ln=1)
 
@@ -41,9 +41,10 @@ class Bill:
         # Tabla de información sobre el cliente
         with pdf.table(text_align='CENTER') as tabla:
             fila = tabla.row()
-            fila.cell(f'No. {self.bill_num}')
+            fila.cell(f'No. {self.customer["no"]}')
             fila.cell(f'Nombre:\n {self.customer["name"]}')
             fila.cell(f'NIT:\n{self.customer["nit"]}')
+            fila.cell(f'Dirección:\n{self.customer["dir"]}')
 
         # Fila de enzabezados (Cantidad, Servicios, Monto)
         with pdf.table(text_align='CENTER') as tabla:

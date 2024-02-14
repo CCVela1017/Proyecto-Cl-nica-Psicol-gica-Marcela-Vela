@@ -22,7 +22,7 @@ def frame1(ventana):
 
 
 def frame_2(ventana):
-    frame = customtkinter.CTkFrame(master=ventana, width=800, height=350)
+    frame = customtkinter.CTkFrame(master=ventana, width=800, height=450)
     frame.pack(pady=10, padx=90, fill='both')
 
     return frame
@@ -60,7 +60,7 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Ventas")
-    ventana.geometry('1270x800+50x50')
+    ventana.geometry('1670x890+50x50')
     ventana.iconbitmap('icon.ico')
     return ventana
 
@@ -75,11 +75,11 @@ def labels_parte1(frame):
     lb_no_fac.pack(pady=400, padx=400, )
     lb_no_fac.place(x=10, y=60)
 
-    no_fac = str(random.randint(1, 1000))
+    no_factura = str(random.randint(1, 1000))
     entry_no_fac = customtkinter.CTkEntry(master=frame, font=("Times New Roman", 15))
     entry_no_fac.pack(pady=400, padx=400, )
     entry_no_fac.place(x=175, y=64)
-    entry_no_fac.insert(0, no_fac)
+    entry_no_fac.insert(0, no_factura)
     entry_no_fac.configure(state="disable")
 
     lb_name = customtkinter.CTkLabel(master=frame, text='Nombre', font=("Times New Roman", 30))
@@ -204,7 +204,7 @@ def labels_parte2(frame, frame_3):
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55,
                                          command=get_service_2)
     boton_add2.pack(pady=400, padx=400)
-    boton_add2.place(x=595, y=160)
+    boton_add2.place(x=750, y=180)
 
     style = ttk.Style()
     style.theme_use('default')
@@ -219,14 +219,14 @@ def labels_parte2(frame, frame_3):
     style.map('Treeview',
               background=[('selected', '#347083')])
 
-    tree_frame = Frame(frame)
+    tree_frame = Frame(frame, height=100)
     tree_frame.pack(pady=70)
-    tree_frame.place(x=70, y=200)
+    tree_frame.place(x=70, y=155)
 
     tree_scroll = Scrollbar(tree_frame)
     tree_scroll.pack(side=RIGHT, fill=Y)
 
-    my_tree_2 = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, selectmode='extended')
+    my_tree_2 = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, selectmode='extended', height=50)
     my_tree_2.pack()
 
     tree_scroll.config(command=my_tree_2.yview)
@@ -355,7 +355,7 @@ def labels_parte2(frame, frame_3):
     button_generar = customtkinter.CTkButton(master=frame, text='CONFIRMAR', font=("Times New Roman", 30, "bold"),
                                              width=15, command=generar_matriz)
     button_generar.pack(pady=12, padx=10)
-    button_generar.place(x=680, y=300)
+    button_generar.place(x=850, y=370)
 
     def factura():
 
@@ -385,8 +385,10 @@ def labels_parte3(frame):
         print(nit)
 
         cliente = {
+            'no': str(no_factura),
             'name': str(name),
-            'nit': str(nit)
+            'nit': str(nit),
+            'dir': str(direccion)
         }
 
         bill = Bill(cliente, matriz)
