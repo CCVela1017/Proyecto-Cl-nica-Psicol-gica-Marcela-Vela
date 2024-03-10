@@ -1,12 +1,11 @@
 import os
-
 import customtkinter
 from PIL import Image
-
 import compras
 import datos_equipo
 import datos_inventario
 import ventas
+from usuarios import menu_recursos_humanos
 
 root = customtkinter.CTk()
 
@@ -36,6 +35,10 @@ def open_ventas():
     ventas.main()
 
 
+def open_menu_recursos():
+    menu_recursos_humanos.main()
+
+
 def buttons(frame):
     button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=100, width=150, font=("Arial", 20),
                                        command=open_inventory, fg_color="#3E4446")
@@ -47,10 +50,15 @@ def buttons(frame):
     button_4 = customtkinter.CTkButton(master=frame, text='Ventas', height=100, width=150, font=("Arial", 20),
                                        command=open_ventas, fg_color="#3E4446")
 
+    button_5 = customtkinter.CTkButton(master=frame, text='Recursos Humanos', height=100, width=150, font=("Arial", 20),
+                                       command=open_menu_recursos, fg_color="#3E4446")
+
     button_1.pack(pady=34, padx=10)
     button_2.pack(pady=34, padx=10)
     button_3.pack(pady=34, padx=10)
-    button_4.pack(pady=34, padx=90)
+    button_4.pack(pady=34, padx=10)
+    button_5.pack(pady=10, padx=90)
+
     return
 
 
