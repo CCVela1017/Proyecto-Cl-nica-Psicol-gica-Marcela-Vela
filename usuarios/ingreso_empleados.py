@@ -11,6 +11,17 @@ def main():
     color = "#3E4446"
     labels_parte1(frame, frame2)
 
+    def confirm() -> dict:
+        data = {'nombres': ib_nombres.get(), 'apellidos': ib_apellidos.get(),
+                'direccion': ib_direccion.get(), 'tel': ib_tel.get(),
+                'num_dpi': ib_num_dpi.get(), 'correo': ib_corre_elec.get(),
+                'estado_civil': cb_estado_civil.get(), 'fecha': cal.get()}
+
+        return data
+
+    def register() -> dict:
+        data = {}
+        return data
     # IB
     ib_nombres = customtkinter.CTkEntry(master=frame, placeholder_text='Ingrese los nombres ', width=200, height=35)
     ib_nombres.pack(pady=12, padx=10)
@@ -34,19 +45,20 @@ def main():
     ib_num_dpi.place(x=300, y=198)
 
     ib_corre_elec = customtkinter.CTkEntry(master=frame, placeholder_text='Ingreso de Correo electronico Personal',
-                                               width=400)
+                                           width=400)
     ib_corre_elec.pack(pady=100, padx=10)
     ib_corre_elec.place(x=170, y=300)
 
     cb_estado_civil = customtkinter.CTkComboBox(master=frame, font=("Times New Roman", 20),
-                                            values=['Solter@', 'Casad@'], width=200)
+                                                values=['Solter@', 'Casad@'], width=200)
     cb_estado_civil.pack(pady=400, padx=400, )
     cb_estado_civil.place(x=200, y=250)
 
     cal = DateEntry(frame, width=50, bg="darkblue", fg="white", year=2023, height=50)
     cal.place(x=350, y=140)
     # confirmación
-    button_confirm_1 = customtkinter.CTkButton(master=frame, text="Confirmar", fg_color=color, width=180, height=45)
+    button_confirm_1 = customtkinter.CTkButton(master=frame, text="Confirmar", fg_color=color, width=180, height=45
+                                               , command=confirm)
     button_confirm_1.pack(pady=100, padx=10)
     button_confirm_1.place(x=630, y=295)
 
@@ -71,11 +83,20 @@ def main():
     cb_turno = customtkinter.CTkComboBox(master=frame2, font=("Times New Roman", 20),
                                          values=['Diurno', 'Nocturno', 'Mixto'], width=200)
     cb_turno.pack(pady=400, padx=400, )
-    cb_turno.place(x=410, y=53)
+    cb_turno.place(x=550, y=53)
 
     ib_num_horas = customtkinter.CTkEntry(master=frame2, placeholder_text='Horas', width=180, height=35)
     ib_num_horas.pack(pady=100, padx=10)
     ib_num_horas.place(x=240, y=100)
+
+    ib_salud = customtkinter.CTkEntry(master=frame2, placeholder_text='Salario', width=180, height=35)
+    ib_salud.pack(pady=100, padx=10)
+    ib_salud.place(x=550, y=100)
+
+    button_confirm_2 = customtkinter.CTkButton(master=frame2, text="Registrar Usuario", fg_color='#1D5DEC', width=830,
+                                               height=35, command=register)
+    button_confirm_2.pack(pady=100, padx=10)
+    button_confirm_2.place(x=10, y=145)
 
     ventana.mainloop()
 
@@ -89,7 +110,7 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Registro de nuevos asociados")
-    ventana.geometry('1000x500')
+    ventana.geometry('975x575')
     return ventana
 
 
@@ -98,6 +119,7 @@ def frame1(ventana):
     frame.pack(pady=10, padx=60, fill='both', ipady=100)
     return frame
 
+
 def frame_2(ventana):
     frame = customtkinter.CTkFrame(master=ventana)
     frame.pack(pady=0, padx=60, fill='both', ipady=80)
@@ -105,7 +127,6 @@ def frame_2(ventana):
 
 
 def labels_parte1(frame, frame_2):
-
     lb_inbreso = customtkinter.CTkLabel(master=frame, text='Registro de nuevos asociados',
                                         font=("Times New Roman", 50, "bold"))
     lb_inbreso.pack(pady=400, padx=400, )
@@ -149,7 +170,8 @@ def labels_parte1(frame, frame_2):
     lb_nivel_academico.pack(pady=400, padx=400)
     lb_nivel_academico.place(x=10, y=10)
 
-    lb_cantidad_de_idiomas = customtkinter.CTkLabel(master=frame_2, text='Cantidad De Idiomas', font=("Times New Roman", 30))
+    lb_cantidad_de_idiomas = customtkinter.CTkLabel(master=frame_2, text='Cantidad De Idiomas',
+                                                    font=("Times New Roman", 30))
     lb_cantidad_de_idiomas.pack(pady=400, padx=400)
     lb_cantidad_de_idiomas.place(x=450, y=10)
 
@@ -159,9 +181,15 @@ def labels_parte1(frame, frame_2):
 
     lb_turno = customtkinter.CTkLabel(master=frame_2, text='Turno', font=("Times New Roman", 30))
     lb_turno.pack(pady=400, padx=400)
-    lb_turno.place(x=325, y=50)
+    lb_turno.place(x=450, y=50)
 
     lb_horas = customtkinter.CTkLabel(master=frame_2, text='Horas de Trabajo', font=("Times New Roman", 30))
     lb_horas.pack(pady=400, padx=400)
     lb_horas.place(x=10, y=100)
 
+    lb_salario = customtkinter.CTkLabel(master=frame_2, text='Salario', font=("Times New Roman", 30))
+    lb_salario.pack(pady=400, padx=400)
+    lb_salario.place(x=450, y=100)
+
+
+main()
