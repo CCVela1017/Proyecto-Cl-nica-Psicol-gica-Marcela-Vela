@@ -192,4 +192,3 @@ def labels_parte1(frame, frame_2):
     lb_salario.place(x=450, y=100)
 
 
-main()
