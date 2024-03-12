@@ -1,5 +1,6 @@
 import customtkinter
 from tkcalendar import DateEntry
+import usuarios.form_user as form_user
 
 global texto_imagen
 
@@ -15,13 +16,30 @@ def main():
         data = {'nombres': ib_nombres.get(), 'apellidos': ib_apellidos.get(),
                 'direccion': ib_direccion.get(), 'tel': ib_tel.get(),
                 'num_dpi': ib_num_dpi.get(), 'correo': ib_corre_elec.get(),
-                'estado_civil': cb_estado_civil.get(), 'fecha': cal.get()}
+                'estado_civil': cb_estado_civil.get(), 'fecha': cal.get(),
+                'academico': cb_nivel_academico.get(), 'idiomas': ib_cantidad_de_idiomas.get(),
+                'puesto': cb_puesto.get(), 'turno': cb_turno.get(),
+                'horas': ib_num_horas.get(), 'salario': ib_salario.get()}
+
+        ib_nombres.delete(0, 'end')
+        ib_apellidos.delete(0, 'end')
+        ib_direccion.delete(0, 'end')
+        ib_tel.delete(0, 'end')
+        ib_num_dpi.delete(0, 'end')
+        ib_corre_elec.delete(0, 'end')
+        cb_estado_civil.set('Solter@')
+        cb_nivel_academico.set('Ninguno')
+        ib_cantidad_de_idiomas.delete(0, 'end')
+        cb_puesto.set('Administrador')
+        cb_turno.set('Diurno')
+        ib_num_horas.delete(0, 'end')
+        ib_salario.delete(0, 'end')
 
         return data
 
-    def register() -> dict:
-        data = {}
-        return data
+    def open_form():
+        form_user.menu_form(confirm())
+
     # IB
     ib_nombres = customtkinter.CTkEntry(master=frame, placeholder_text='Ingrese los nombres ', width=200, height=35)
     ib_nombres.pack(pady=12, padx=10)
@@ -56,11 +74,6 @@ def main():
 
     cal = DateEntry(frame, width=50, bg="darkblue", fg="white", year=2023, height=50)
     cal.place(x=350, y=140)
-    # confirmación
-    button_confirm_1 = customtkinter.CTkButton(master=frame, text="Confirmar", fg_color=color, width=180, height=45
-                                               , command=confirm)
-    button_confirm_1.pack(pady=100, padx=10)
-    button_confirm_1.place(x=630, y=295)
 
     # parte 2
 
@@ -89,12 +102,12 @@ def main():
     ib_num_horas.pack(pady=100, padx=10)
     ib_num_horas.place(x=240, y=100)
 
-    ib_salud = customtkinter.CTkEntry(master=frame2, placeholder_text='Salario', width=180, height=35)
-    ib_salud.pack(pady=100, padx=10)
-    ib_salud.place(x=550, y=100)
+    ib_salario = customtkinter.CTkEntry(master=frame2, placeholder_text='Salario', width=180, height=35)
+    ib_salario.pack(pady=100, padx=10)
+    ib_salario.place(x=550, y=100)
 
     button_confirm_2 = customtkinter.CTkButton(master=frame2, text="Registrar Usuario", fg_color='#1D5DEC', width=830,
-                                               height=35, command=register)
+                                               height=35, command=open_form)
     button_confirm_2.pack(pady=100, padx=10)
     button_confirm_2.place(x=10, y=145)
 
