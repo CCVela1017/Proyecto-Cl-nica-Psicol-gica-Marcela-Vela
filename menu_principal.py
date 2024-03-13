@@ -35,17 +35,23 @@ def open_ventas():
     ventas.main()
 
 
+
 def open_menu_recursos():
     menu_recursos_humanos.main()
 
 
-def buttons(frame):
+def buttons(frame, access: str):
+    if access == 'Empleado':
+        state = 'disabled'
+    else:
+        state = 'normal'
+
     button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=100, width=150, font=("Arial", 20),
-                                       command=open_inventory, fg_color="#3E4446")
+                                       command=open_inventory, fg_color="#3E4446", state=state)
     button_2 = customtkinter.CTkButton(master=frame, text='Equipo', height=100, width=150, font=("Arial", 20),
-                                       command=open_equipment, fg_color="#3E4446")
+                                       command=open_equipment, fg_color="#3E4446", state=state)
     button_3 = customtkinter.CTkButton(master=frame, text='Compras', height=100, width=150, font=("Arial", 20),
-                                       command=open_shop, fg_color="#3E4446")
+                                       command=open_shop, fg_color="#3E4446", state=state)
 
     button_4 = customtkinter.CTkButton(master=frame, text='Ventas', height=100, width=150, font=("Arial", 20),
                                        command=open_ventas, fg_color="#3E4446")
@@ -62,7 +68,7 @@ def buttons(frame):
     return
 
 
-def main_window():
+def main_window(access_lvl: str):
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
 
@@ -78,11 +84,9 @@ def main_window():
 
     add_image(frame3)
 
-    buttons(frame2)
+    buttons(frame2, access_lvl)
 
     frame.pack()
     root.geometry('1300x700')
     root.mainloop()
 
-
-main_window()
