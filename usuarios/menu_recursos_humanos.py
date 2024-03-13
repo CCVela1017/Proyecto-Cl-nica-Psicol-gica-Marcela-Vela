@@ -2,10 +2,15 @@ import customtkinter
 
 global texto_imagen
 from usuarios import ingreso_empleados
+from usuarios import mostrar_empleados
 
 
 def open_ingreso():
     ingreso_empleados.main()
+
+
+def open_mostrar():
+    mostrar_empleados.main()
 
 
 def main():
@@ -14,14 +19,15 @@ def main():
     color = "#3E4446"
     labels_parte1(frame)
 
-    button_ingreso = customtkinter.CTkButton(master=frame, text="Ingreso", fg_color=color, height=150)
-    button_ingreso.pack(pady=100, padx=10)
-    button_ingreso.place(x=10, y=100)
-
     button_ingreso = customtkinter.CTkButton(master=frame, text="Ingreso", fg_color=color, height=150,
                                              command=open_ingreso)
     button_ingreso.pack(pady=100, padx=10)
     button_ingreso.place(x=10, y=100)
+
+    button_mostrar = customtkinter.CTkButton(master=frame, text="Mostrar", fg_color=color, height=150,
+                                             command=open_mostrar)
+    button_mostrar.pack(pady=100, padx=10)
+    button_mostrar.place(x=200, y=100)
 
     ventana.mainloop()
 

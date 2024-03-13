@@ -3,6 +3,7 @@ from PIL import Image
 import os
 import sqlite3
 from tkinter import messagebox
+
 import hashlib
 
 
@@ -18,8 +19,8 @@ def menu_form(info: dict):
             ib_password.delete(0, 'end')
             ib_password2.delete(0, 'end')
 
-        def encrypt_password(password: str) -> str:
-            pswd_bytes = password.encode('utf-8')
+        def encrypt_password(passwd: str) -> str:
+            pswd_bytes = passwd.encode('utf-8')
 
             sha_256_hash = hashlib.sha256()
 
@@ -88,17 +89,17 @@ def menu_form(info: dict):
 
         def toggle_password_visibility():
             current_show_state = ib_password.cget("show")
-            if current_show_state == "*":
+            if current_show_state == "●":
                 ib_password.configure(show="")
             else:
-                ib_password.configure(show="*")
+                ib_password.configure(show="●")
 
         def toggle_password_visibility2():
             current_show_state = ib_password2.cget("show")
-            if current_show_state == "*":
+            if current_show_state == "●":
                 ib_password2.configure(show="")
             else:
-                ib_password2.configure(show="*")
+                ib_password2.configure(show="●")
 
         lb_user = customtkinter.CTkLabel(master=frame, text='Usuario:', font=("Times New Roman", 25))
         lb_user.pack(pady=400, padx=400)
@@ -113,7 +114,7 @@ def menu_form(info: dict):
         lb_psd.place(x=15, y=63)
 
         ib_password = customtkinter.CTkEntry(master=frame, placeholder_text='Contraseña', width=200, height=35,
-                                             show="*")
+                                             show="●")
         ib_password.pack(pady=12, padx=10)
         ib_password.place(x=200, y=63)
 
@@ -128,7 +129,7 @@ def menu_form(info: dict):
         lb_psd2.place(x=15, y=116)
 
         ib_password2 = customtkinter.CTkEntry(master=frame, placeholder_text='Contraseña de Administrador', width=200
-                                              , height=35, show="*")
+                                              , height=35, show="●")
         ib_password2.pack(pady=12, padx=10)
         ib_password2.place(x=200, y=116)
 

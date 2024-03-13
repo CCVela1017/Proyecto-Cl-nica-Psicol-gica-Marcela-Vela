@@ -12,8 +12,8 @@ root = customtkinter.CTk()
 
 def add_image(frame):
     image_path = os.path.join(os.path.dirname(__file__), 'icon.png')
-    image = customtkinter.CTkImage(light_image=Image.open(image_path), size=(500, 500))
-    image_label = customtkinter.CTkLabel(master=frame, image=image)
+    image = customtkinter.CTkImage(light_image=Image.open(image_path), size=(450, 450))
+    image_label = customtkinter.CTkLabel(master=frame, image=image, text='')
     image_label.place(x=55, y=85)
 
     return
@@ -41,23 +41,38 @@ def open_menu_recursos():
 
 
 def buttons(frame, access: str):
-    if access == 'Empleado':
-        state = 'disabled'
-    else:
-        state = 'normal'
+    state: dict = {}
+    if access == 'Recepcionista':
+        state = {'inventory': 'normal',
+                 'equipment': 'disabled',
+                 'shop': 'disabled',
+                 'ventas': 'normal',
+                 'users': 'disabled'}
+    elif access == 'Administrador':
+        state = {'inventory': 'normal',
+                 'equipment': 'normal',
+                 'shop': 'normal',
+                 'ventas': 'normal',
+                 'users': 'normal'}
+    elif access == 'Gerente':
+        state = {'inventory': 'normal',
+                 'equipment': 'normal',
+                 'shop': 'normal',
+                 'ventas': 'normal',
+                 'users': 'disabled'}
 
-    button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=100, width=150, font=("Arial", 20),
-                                       command=open_inventory, fg_color="#3E4446", state=state)
-    button_2 = customtkinter.CTkButton(master=frame, text='Equipo', height=100, width=150, font=("Arial", 20),
-                                       command=open_equipment, fg_color="#3E4446", state=state)
-    button_3 = customtkinter.CTkButton(master=frame, text='Compras', height=100, width=150, font=("Arial", 20),
-                                       command=open_shop, fg_color="#3E4446", state=state)
+    button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=75, width=150, font=("Arial", 20),
+                                       command=open_inventory, fg_color="#3E4446", state=state['inventory'])
+    button_2 = customtkinter.CTkButton(master=frame, text='Equipo', height=75, width=150, font=("Arial", 20),
+                                       command=open_equipment, fg_color="#3E4446", state=state['equipment'])
+    button_3 = customtkinter.CTkButton(master=frame, text='Compras', height=75, width=150, font=("Arial", 20),
+                                       command=open_shop, fg_color="#3E4446", state=state['shop'])
 
-    button_4 = customtkinter.CTkButton(master=frame, text='Ventas', height=100, width=150, font=("Arial", 20),
-                                       command=open_ventas, fg_color="#3E4446")
+    button_4 = customtkinter.CTkButton(master=frame, text='Ventas', height=75, width=150, font=("Arial", 20),
+                                       command=open_ventas, fg_color="#3E4446", state=state['ventas'])
 
-    button_5 = customtkinter.CTkButton(master=frame, text='Recursos Humanos', height=100, width=150, font=("Arial", 20),
-                                       command=open_menu_recursos, fg_color="#3E4446")
+    button_5 = customtkinter.CTkButton(master=frame, text='Recursos Humanos', height=75, width=150, font=("Arial", 20),
+                                       command=open_menu_recursos, fg_color="#3E4446", state=state['users'])
 
     button_1.pack(pady=34, padx=10)
     button_2.pack(pady=34, padx=10)

@@ -1,9 +1,10 @@
 import customtkinter
-from werkzeug.security import check_password_hash
+import hashlib
 from tkinter import *
 from tkinter import messagebox
 import menu_principal
 from PIL import Image
+import sqlite3
 import os
 
 ventana = Toplevel(background='#1a1a1a')
@@ -17,28 +18,64 @@ vector_ejemplo = [['Eduardo', 'pbkdf2:sha256:600000$RgGwUg'
                   ]
 
 '''
-contraseña Eduardo: Kazul102934_ii_4y47hd6
-contraseña Andrea: 1234
+contraseña gerente: 1234
+contraseña admin: 123456
+
 '''
 
 
+def toggle_password_visibility():
+    current_show_state = entrada_contrasena.cget("show")
+    if current_show_state == "●":
+        entrada_contrasena.configure(show="")
+    else:
+        entrada_contrasena.configure(show="●")
+
+
+def encrypt_password(passwd: str) -> str:
+    pswd_bytes = passwd.encode('utf-8')
+
+    sha_256_hash = hashlib.sha256()
+
+    sha_256_hash.update(pswd_bytes)
+
+    encrypted_pswd = sha_256_hash.hexdigest()
+
+    return encrypted_pswd
+
+
+def cargar_base_de_datos():
+    try:
+        data = []
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+        cursor.execute('SELECT * FROM users')
+        rows = cursor.fetchall()
+        for row in rows:
+            data.append(row)
+        return data
+    except Exception as ex:
+        print(ex)
+
+
 def confirm_user_pass():
+    table = cargar_base_de_datos()
     user = entrada_usuario.get()
     passwd = entrada_contrasena.get()
     found_user = False
     j = 0
-    for i in vector_ejemplo:
-        if i[0] == user:
+    for i in table:
+        if i[14] == user:
             found_user = True
             break
         else:
             j += 1
 
     if found_user:
-        saved_passwd = vector_ejemplo[j][1]
-        if check_password_hash(saved_passwd, passwd):
+        saved_passwd = table[j][13]
+        if saved_passwd == encrypt_password(passwd):
             ventana.withdraw()
-            menu_principal.main_window(vector_ejemplo[j][2])
+            menu_principal.main_window(table[j][10])
         else:
             messagebox.showerror('Acceso denegado', 'El nombre de usuario o contraseña son incorrectos.')
     else:
@@ -50,6 +87,9 @@ def confirm_user_pass():
         entrada_usuario._activate_placeholder()
         entrada_contrasena._activate_placeholder()
 
+
+img_path = os.path.join(os.path.dirname(__file__), 'usuarios/show_pswd.png')
+image2 = customtkinter.CTkImage(light_image=Image.open(img_path), size=(15, 15))
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -63,9 +103,9 @@ ventana.resizable(False, False)
 
 """Imagen de la izquierda"""
 image_path = os.path.join(os.path.dirname(__file__), 'icon.png')
-image = customtkinter.CTkImage(light_image=Image.open(image_path), size=(450, 450))
-image_label = customtkinter.CTkLabel(master=ventana, image=image)
-image_label.place(x=45, y=85)
+image = customtkinter.CTkImage(light_image=Image.open(image_path), size=(300, 300))
+image_label = customtkinter.CTkLabel(master=ventana, image=image, text='')
+image_label.place(x=35, y=85)
 
 """Marco"""
 marco = customtkinter.CTkFrame(master=ventana, width=400, height=500)
@@ -100,6 +140,12 @@ contrasena_obligatoria.place(x=25, y=275)
 aceptar = customtkinter.CTkButton(master=marco, text="Aceptar", height=25, width=300, font=("times new roman", 20),
                                 fg_color="#086EB9", command=confirm_user_pass)
 aceptar.place(x=35, y=340)
+
+button_show_pswd2 = customtkinter.CTkButton(master=marco, height=35, width=35, image=image2, text='',
+                                                    command=toggle_password_visibility, fg_color="#FFFFFF")
+
+button_show_pswd2.pack(pady=34, padx=10)
+button_show_pswd2.place(x=350, y=230)
 
 ventana.mainloop()
 
