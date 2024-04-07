@@ -1,6 +1,6 @@
 import os.path
 from tkinter import messagebox
-
+import datetime
 import customtkinter
 from PIL import Image
 from tkinter import filedialog
@@ -217,7 +217,36 @@ def main():
 
         conexion.commit()
         conexion.close()
+        registrar_factura()
         reset_all()
+
+
+    def registrar_factura():
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+
+        try:
+            cursor.execute("INSERT INTO facturas_compras (numero, "
+                           "proveedor, "
+                           "producto, "
+                           "dia, "
+                           "mes, "
+                           "anio, "
+                           "monto_total) "
+                           "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                           (ib_num_factura.get(),
+                            ib_proveedor.get(),
+                            ib_name.get(),
+                            datetime.datetime.today().date().day,
+                            datetime.datetime.today().date().month,
+                            datetime.datetime.today().date().year,
+                            int(ib_cantidad.get()) * int(ib_precio.get())))
+
+        except Exception as ex:
+            print(ex)
+
+        conexion.commit()
+        conexion.close()
 
     def editar():
         # activar input box

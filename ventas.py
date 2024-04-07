@@ -431,6 +431,7 @@ def labels_parte3(frame):
 
         bill = Bill(cliente, matriz)
         bill.print_bill()
+        bill.register_bill()
 
     factura_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Facturar', height=100,
                                              command=facturacion)
