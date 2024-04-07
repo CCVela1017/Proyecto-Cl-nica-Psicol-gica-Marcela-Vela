@@ -37,7 +37,7 @@ def main():
     ib_proveedor.pack(pady=100, padx=10)
     ib_proveedor.place(x=150, y=153)
 
-    ib_precio = customtkinter.CTkEntry(master=frame, placeholder_text='Ingrese el precio', width=180, height=35)
+    ib_precio = customtkinter.CTkEntry(master=frame, placeholder_text='Ingrese el precio por unidad', width=180, height=35)
     ib_precio.pack(pady=100, padx=10)
     ib_precio.place(x=630, y=153)
 
@@ -183,6 +183,7 @@ def main():
 
         conexion = sqlite3.connect('src/database')
         cursor = conexion.cursor()
+
         try:
             cursor.execute("INSERT INTO objetos_de_inventario (Nombre, "
                            "Descripción, "
@@ -190,21 +191,27 @@ def main():
                            "Cantidad, "
                            "Proveedor, "
                            "Serie, "
-                           "Imagen) "
-                           "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                           "Imagen, "
+                           "costo_uni, "
+                           "servicio)"
+                           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                        (ib_name.get(),
                         ib_desc.get(),
-                        int(ib_precio.get()),
+                        int(ib_precio.get()) * int(ib_cantidad.get()),
                         int(ib_cantidad.get()),
                         ib_proveedor.get(),
                         ib_id.get(),
-                        sqlite3.Binary(datos_imagen)))
+                        sqlite3.Binary(datos_imagen),
+                        ib_precio.get(),
+                        0))
             messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
                                                                     'enviados correctamente a la base de datos.')
+
         except Exception as ex:
-            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo'
+            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo '
                                                                        'no coincide con la base de datos, verifica los '
                                                                        'datos ingresados.')
+
             reset_all()
             print(ex)
 
@@ -295,7 +302,7 @@ def labels_parte1(frame, frame2):
     lb_proveedor.pack(pady=400, padx=400)
     lb_proveedor.place(x=10, y=150)
 
-    lb_precio = customtkinter.CTkLabel(master=frame, text='Precio', font=("Times New Roman", 30))
+    lb_precio = customtkinter.CTkLabel(master=frame, text='Precio/U', font=("Times New Roman", 30))
     lb_precio.pack(pady=400, padx=400)
     lb_precio.place(x=515, y=160)
 

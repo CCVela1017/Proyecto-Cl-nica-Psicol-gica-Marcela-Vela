@@ -21,7 +21,7 @@ def frame1(ventana):
 
 
 def frame_2(ventana):
-    frame = customtkinter.CTkFrame(master=ventana, width=800, height=450)
+    frame = customtkinter.CTkFrame(master=ventana, width=800, height=345)
     frame.pack(pady=10, padx=90, fill='both')
 
     return frame
@@ -59,7 +59,7 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Ventas")
-    ventana.geometry('1670x890+50x50')
+    ventana.geometry('1400x775+50x50')
     ventana.iconbitmap('icon.ico')
     return ventana
 
@@ -203,7 +203,7 @@ def labels_parte2(frame, frame_3):
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55,
                                          command=get_service_2)
     boton_add2.pack(pady=400, padx=400)
-    boton_add2.place(x=750, y=180)
+    boton_add2.place(x=600, y=165)
 
     style = ttk.Style()
     style.theme_use('default')
@@ -220,7 +220,7 @@ def labels_parte2(frame, frame_3):
 
     tree_frame = Frame(frame, height=100)
     tree_frame.pack(pady=70)
-    tree_frame.place(x=70, y=155)
+    tree_frame.place(x=70, y=200)
 
     tree_scroll = Scrollbar(tree_frame)
     tree_scroll.pack(side=RIGHT, fill=Y)
@@ -339,7 +339,8 @@ def labels_parte2(frame, frame_3):
             nombre = rows_[1]
             conexion_ = sqlite3.connect('src/database')
             cursor_ = conexion_.cursor()
-            cursor_.execute(f'SELECT Cantidad FROM objetos_de_inventario WHERE Nombre = "{nombre}" and servicio = 0')
+            cursor_.execute(f'SELECT Cantidad FROM objetos_de_inventario '
+                            f'WHERE Nombre = "{nombre}" and servicio = 0')
             try:
                 existencias_actuales = cursor_.fetchone()[0]
                 cursor_.close()
@@ -352,8 +353,18 @@ def labels_parte2(frame, frame_3):
             print(existencias_actuales)
             print(nombre)
 
+            cursor_1 = conexion_.cursor()
+            cursor_1.execute(f'SELECT costo_uni FROM objetos_de_inventario '
+                            f'WHERE Nombre = "{nombre}" and servicio = 0')
+
+            costo_uni = cursor_1.fetchone()[0]
+
             cursor_2 = conexion_.cursor()
-            cursor_2.execute(f'UPDATE objetos_de_inventario SET Cantidad = {existencias_actuales} WHERE Nombre = "{nombre}" and servicio = 0')
+            cursor_2.execute(f'UPDATE objetos_de_inventario SET Cantidad = {existencias_actuales} '
+                             f'WHERE Nombre = "{nombre}" and servicio = 0')
+            cursor_3 = conexion_.cursor()
+            cursor_3.execute(f'UPDATE objetos_de_inventario SET Costo = {int(existencias_actuales) * int(costo_uni)} '
+                             f'WHERE Nombre = "{nombre}" and servicio = 0')
             conexion_.commit()
             cursor_2.close()
             conexion_.close()
@@ -380,7 +391,7 @@ def labels_parte2(frame, frame_3):
     button_generar = customtkinter.CTkButton(master=frame, text='CONFIRMAR', font=("Times New Roman", 30, "bold"),
                                              width=15, command=generar_matriz)
     button_generar.pack(pady=12, padx=10)
-    button_generar.place(x=850, y=370)
+    button_generar.place(x=850, y=290)
 
     def factura():
 
