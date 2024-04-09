@@ -11,6 +11,7 @@ global direccion
 global nit
 global no_factura
 global matriz
+global forma_pago
 
 
 def frame1(ventana):
@@ -21,7 +22,7 @@ def frame1(ventana):
 
 
 def frame_2(ventana):
-    frame = customtkinter.CTkFrame(master=ventana, width=800, height=450)
+    frame = customtkinter.CTkFrame(master=ventana, width=800, height=345)
     frame.pack(pady=10, padx=90, fill='both')
 
     return frame
@@ -59,7 +60,7 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Ventas")
-    ventana.geometry('1670x890+50x50')
+    ventana.geometry('1400x775+50x50')
     ventana.iconbitmap('icon.ico')
     return ventana
 
@@ -98,6 +99,10 @@ def labels_parte1(frame):
     lb_ciudad.pack(pady=400, padx=400, )
     lb_ciudad.place(x=350, y=60)
 
+    lb_forma_pago = customtkinter.CTkLabel(master=frame, text='Forma de pago', font=("Times New Roman", 30))
+    lb_forma_pago.pack(pady=400, padx=400, )
+    lb_forma_pago.place(x=350, y=100)
+
     entry_nit = customtkinter.CTkEntry(master=frame, font=("Times New Roman", 15),
                                        placeholder_text='Ingrese NIT.')
     entry_nit.pack(pady=400, padx=400, )
@@ -107,6 +112,10 @@ def labels_parte1(frame):
                                          placeholder_text='Ingrese la Ciudad')
     entry_dress.pack(pady=400, padx=400, )
     entry_dress.place(x=480, y=65)
+
+    cb_forma_pago = customtkinter.CTkComboBox(master=frame, values=['Efectivo', 'Cheque', 'Tarjeta'], width=250)
+    cb_forma_pago.pack(pady=400, padx=400)
+    cb_forma_pago.place(x=550, y=105)
 
     def mandar_datos():
         global name
@@ -120,6 +129,9 @@ def labels_parte1(frame):
 
         global no_factura
         no_factura = entry_no_fac.get()
+
+        global forma_pago
+        forma_pago = cb_forma_pago.get()
 
     confirm_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Confirmar cliente',
                                              height=40, command=mandar_datos)
@@ -203,7 +215,7 @@ def labels_parte2(frame, frame_3):
     boton_add2 = customtkinter.CTkButton(master=frame, text='+', font=("Times New Roman", 40, "bold"), width=55,
                                          command=get_service_2)
     boton_add2.pack(pady=400, padx=400)
-    boton_add2.place(x=750, y=180)
+    boton_add2.place(x=600, y=165)
 
     style = ttk.Style()
     style.theme_use('default')
@@ -220,7 +232,7 @@ def labels_parte2(frame, frame_3):
 
     tree_frame = Frame(frame, height=100)
     tree_frame.pack(pady=70)
-    tree_frame.place(x=70, y=155)
+    tree_frame.place(x=70, y=200)
 
     tree_scroll = Scrollbar(tree_frame)
     tree_scroll.pack(side=RIGHT, fill=Y)
@@ -230,19 +242,19 @@ def labels_parte2(frame, frame_3):
 
     tree_scroll.config(command=my_tree_2.yview)
 
-    my_tree_2['columns'] = ('Nombre', 'Descripción', 'Existencia', 'Costo/U')
+    my_tree_2['columns'] = ('Nombre', 'Descripción', 'Existencia', 'Precio/U')
 
     my_tree_2.column('#0', width=0, stretch=NO)
     my_tree_2.column('Nombre', anchor=W, stretch=NO)
     my_tree_2.column('Descripción', anchor=W)
     my_tree_2.column('Existencia', anchor=W, stretch=NO, width=120)
-    my_tree_2.column('Costo/U', anchor=W, stretch=NO, width=120)
+    my_tree_2.column('Precio/U', anchor=W, stretch=NO, width=120)
 
     my_tree_2.heading('#0', text='', anchor=W)
     my_tree_2.heading('Nombre', text='Nombre', anchor=W)
     my_tree_2.heading('Descripción', text='Descripción', anchor=W)
     my_tree_2.heading('Existencia', text='Existencia', anchor=W)
-    my_tree_2.heading('Costo/U', text='Costo/U', anchor=W)
+    my_tree_2.heading('Precio/U', text='Precio/U', anchor=W)
 
     my_tree_2.tag_configure('oddrow', background='white')
     my_tree_2.tag_configure('evenrow', background='lightblue')
@@ -252,7 +264,7 @@ def labels_parte2(frame, frame_3):
     data_ = []
     conexion = sqlite3.connect('src/database')
     cursor = conexion.cursor()
-    cursor.execute('SELECT Nombre, Descripción, Cantidad, costo_uni FROM objetos_de_inventario WHERE servicio = 0')
+    cursor.execute('SELECT Nombre, Descripción, Cantidad, precio_venta FROM objetos_de_inventario WHERE servicio = 0')
     rows = cursor.fetchall()
     for row in rows:
         data_.append(row)
@@ -339,7 +351,8 @@ def labels_parte2(frame, frame_3):
             nombre = rows_[1]
             conexion_ = sqlite3.connect('src/database')
             cursor_ = conexion_.cursor()
-            cursor_.execute(f'SELECT Cantidad FROM objetos_de_inventario WHERE Nombre = "{nombre}" and servicio = 0')
+            cursor_.execute(f'SELECT Cantidad FROM objetos_de_inventario '
+                            f'WHERE Nombre = "{nombre}" and servicio = 0')
             try:
                 existencias_actuales = cursor_.fetchone()[0]
                 cursor_.close()
@@ -352,8 +365,18 @@ def labels_parte2(frame, frame_3):
             print(existencias_actuales)
             print(nombre)
 
+            cursor_1 = conexion_.cursor()
+            cursor_1.execute(f'SELECT costo_uni FROM objetos_de_inventario '
+                            f'WHERE Nombre = "{nombre}" and servicio = 0')
+
+            costo_uni = cursor_1.fetchone()[0]
+
             cursor_2 = conexion_.cursor()
-            cursor_2.execute(f'UPDATE objetos_de_inventario SET Cantidad = {existencias_actuales} WHERE Nombre = "{nombre}" and servicio = 0')
+            cursor_2.execute(f'UPDATE objetos_de_inventario SET Cantidad = {existencias_actuales} '
+                             f'WHERE Nombre = "{nombre}" and servicio = 0')
+            cursor_3 = conexion_.cursor()
+            cursor_3.execute(f'UPDATE objetos_de_inventario SET Costo = {int(existencias_actuales) * int(costo_uni)} '
+                             f'WHERE Nombre = "{nombre}" and servicio = 0')
             conexion_.commit()
             cursor_2.close()
             conexion_.close()
@@ -380,7 +403,7 @@ def labels_parte2(frame, frame_3):
     button_generar = customtkinter.CTkButton(master=frame, text='CONFIRMAR', font=("Times New Roman", 30, "bold"),
                                              width=15, command=generar_matriz)
     button_generar.pack(pady=12, padx=10)
-    button_generar.place(x=850, y=370)
+    button_generar.place(x=850, y=290)
 
     def factura():
 
@@ -413,13 +436,15 @@ def labels_parte3(frame):
             'no': str(no_factura),
             'name': str(name),
             'nit': str(nit),
-            'dir': str(direccion)
+            'dir': str(direccion),
+            'fpago': str(forma_pago)
         }
 
         messagebox.showinfo('Instrucción', 'Si desea generar otra factura, recomendamos cerrar la ventana.')
 
         bill = Bill(cliente, matriz)
         bill.print_bill()
+        bill.register_bill()
 
     factura_button = customtkinter.CTkButton(master=frame, font=("Times New Roman", 18), text='Facturar', height=100,
                                              command=facturacion)

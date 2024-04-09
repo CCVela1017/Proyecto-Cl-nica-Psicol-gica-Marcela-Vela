@@ -135,7 +135,7 @@ def front_end(frame, frame2):
 
     tree_scroll.config(command=my_tree.yview)
 
-    my_tree['columns'] = ('ID', 'Nombre', 'Descripción', 'Costo', 'Cantidad', 'Proveedor', 'Serie')
+    my_tree['columns'] = ('ID', 'Nombre', 'Descripción', 'Costo', 'Cantidad', 'Proveedor', 'Serie', 'Precio Venta')
 
     my_tree.column('#0', width=0, stretch=NO)
     my_tree.column('ID', anchor=W, stretch=NO, width=45)
@@ -145,6 +145,7 @@ def front_end(frame, frame2):
     my_tree.column('Cantidad', anchor=W, stretch=NO, width=120)
     my_tree.column('Proveedor', anchor=W, stretch=NO)
     my_tree.column('Serie', anchor=W, stretch=NO)
+    my_tree.column('Precio Venta', anchor=W, stretch=NO)
 
     my_tree.heading('#0', text='', anchor=W)
     my_tree.heading('ID', text='ID', anchor=W)
@@ -154,6 +155,7 @@ def front_end(frame, frame2):
     my_tree.heading('Cantidad', text='Cantidad', anchor=W)
     my_tree.heading('Proveedor', text='Proveedor', anchor=W)
     my_tree.heading('Serie', text='Serie', anchor=W)
+    my_tree.heading('Precio Venta', text='Precio Venta', anchor=W)
 
     my_tree.tag_configure('oddrow', background='white')
     my_tree.tag_configure('evenrow', background='lightblue')
@@ -173,11 +175,11 @@ def front_end(frame, frame2):
         if count % 2 == 0:
             my_tree.insert(parent='', index='end', iid=count, text='',
                            values=(record[0], record[1], record[2], record[3],
-                                   record[4], record[5], record[6]), tags=('evenrow',))
+                                   record[4], record[5], record[6], record[10]), tags=('evenrow',))
         else:
             my_tree.insert(parent='', index='end', iid=count, text='',
                            values=(record[0], record[1], record[2], record[3],
-                                   record[4], record[5], record[6]), tags=('oddrow',))
+                                   record[4], record[5], record[6], record[10]), tags=('oddrow',))
         count += 1
 
     return
