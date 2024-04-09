@@ -2,6 +2,7 @@
 import random
 from fpdf import FPDF
 import datetime
+import sqlite3
 
 # Diccionario para el membrete
 
@@ -19,6 +20,37 @@ class Bill:
         self.bill_num = str(random.randint(1, 1000))
         self.services = services
         self.total = 0
+
+    def register_bill(self):
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+
+        try:
+            cursor.execute("INSERT INTO facturas_ventas (numero, "
+                           "name_cliente, "
+                           "nit_cliente, "
+                           "dir_cliente, "
+                           "dia, "
+                           "mes, "
+                           "anio, "
+                           "monto_total, "
+                           "forma_pago) "
+                           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                           (self.customer["no"],
+                            self.customer["name"],
+                            self.customer["nit"],
+                            self.customer["dir"],
+                            datetime.datetime.today().date().day,
+                            datetime.datetime.today().date().month,
+                            datetime.datetime.today().date().year,
+                            self.total,
+                            self.customer["fpago"]))
+
+        except Exception as ex:
+            print(ex)
+
+        conexion.commit()
+        conexion.close()
 
     def print_bill(self):
 

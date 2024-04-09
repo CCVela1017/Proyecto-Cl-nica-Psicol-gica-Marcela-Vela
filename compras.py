@@ -1,6 +1,6 @@
 import os.path
 from tkinter import messagebox
-
+import datetime
 import customtkinter
 from PIL import Image
 from tkinter import filedialog
@@ -37,9 +37,9 @@ def main():
     ib_proveedor.pack(pady=100, padx=10)
     ib_proveedor.place(x=150, y=153)
 
-    ib_precio = customtkinter.CTkEntry(master=frame, placeholder_text='Ingrese el precio', width=180, height=35)
-    ib_precio.pack(pady=100, padx=10)
-    ib_precio.place(x=630, y=153)
+    ib_costo = customtkinter.CTkEntry(master=frame, placeholder_text='Ingrese el costo por unidad', width=180, height=35)
+    ib_costo.pack(pady=100, padx=10)
+    ib_costo.place(x=630, y=153)
 
     ib_cantidad = customtkinter.CTkEntry(master=frame, placeholder_text='Ingrese la cantidad', width=180,
                                          height=35)
@@ -51,10 +51,15 @@ def main():
     ib_num_factura.pack(pady=100, padx=10)
     ib_num_factura.place(x=200, y=245)
 
-    lb_precio_confi = customtkinter.CTkLabel(master=frame2, text='Precio:',
+    ib_precio_venta = customtkinter.CTkEntry(master=frame, placeholder_text='Precio de venta',
+                                            width=180, height=35)
+    ib_precio_venta.pack(pady=100, padx=10)
+    ib_precio_venta.place(x=200, y=290)
+
+    lb_costo_confi = customtkinter.CTkLabel(master=frame2, text='Costo:',
                                              font=("Times New Roman", 30))
-    lb_precio_confi.pack(pady=400, padx=400)
-    lb_precio_confi.place(x=445, y=140)
+    lb_costo_confi.pack(pady=400, padx=400)
+    lb_costo_confi.place(x=445, y=140)
 
     lb_cantidad_confi = customtkinter.CTkLabel(master=frame2, text='Cantidad:',
                                                font=("Times New Roman", 30))
@@ -123,10 +128,10 @@ def main():
         producto = ib_name.get()
         descripcion = ib_desc.get()
         proveedor = ib_proveedor.get()
-        precio = int(ib_precio.get())
+        costo = int(ib_costo.get())
         cantidad = int(ib_cantidad.get())
         numero_de_factura = ib_num_factura.get()
-        total = precio * cantidad
+        total = costo * cantidad
         print(texto_imagen + " 1231")
 
         # texto mostrar
@@ -139,7 +144,7 @@ def main():
         img_path2 = os.path.join(os.path.dirname(__file__), imagen_carga2)
         image.configure(light_image=Image.open(img_path2), size=(150, 150), text="")
 
-        lb_precio_confi.configure(text=f'Precio:       Q{precio}')
+        lb_costo_confi.configure(text=f'Costo:       Q{costo}')
         lb_cantidad_confi.configure(text=f'Cantidad:       Q{cantidad}')
         lb_total_confi.configure(text=f'TOTAL:      Q{total}')
 
@@ -148,31 +153,34 @@ def main():
         ib_name.configure(state="disable")
         ib_desc.configure(state="disable")
         ib_proveedor.configure(state="disable")
-        ib_precio.configure(state="disable")
+        ib_costo.configure(state="disable")
         ib_cantidad.configure(state="disable")
         ib_num_factura.configure(state="disable")
+        ib_precio_venta.configure(state="disable")
 
     def reset_all():
         ib_id.configure(state="normal")
         ib_name.configure(state="normal")
         ib_desc.configure(state="normal")
         ib_proveedor.configure(state="normal")
-        ib_precio.configure(state="normal")
+        ib_costo.configure(state="normal")
         ib_cantidad.configure(state="normal")
         ib_num_factura.configure(state="normal")
+        ib_precio_venta.configure(state="normal")
 
         ib_id.delete(0, 'end')
         ib_name.delete(0, 'end')
         ib_desc.delete(0, 'end')
         ib_proveedor.delete(0, 'end')
-        ib_precio.delete(0, 'end')
+        ib_costo.delete(0, 'end')
         ib_cantidad.delete(0, 'end')
         ib_num_factura.delete(0, 'end')
+        ib_precio_venta.delete(0, 'end')
 
         lb_mostrar_datos.configure(text="", fg_color=color)
         image.configure(light_image=Image.open(imagen_carga), size=(150, 150))
 
-        lb_precio_confi.configure(text='Precio:')
+        lb_costo_confi.configure(text='Costo:')
         lb_cantidad_confi.configure(text='Cantidad:')
         lb_total_confi.configure(text='TOTAL:')
 
@@ -183,6 +191,7 @@ def main():
 
         conexion = sqlite3.connect('src/database')
         cursor = conexion.cursor()
+
         try:
             cursor.execute("INSERT INTO objetos_de_inventario (Nombre, "
                            "Descripción, "
@@ -190,27 +199,64 @@ def main():
                            "Cantidad, "
                            "Proveedor, "
                            "Serie, "
-                           "Imagen) "
-                           "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                           "Imagen, "
+                           "costo_uni, "
+                           "servicio, "
+                           "precio_venta)"
+                           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                        (ib_name.get(),
                         ib_desc.get(),
-                        int(ib_precio.get()),
+                        int(ib_costo.get()) * int(ib_cantidad.get()),
                         int(ib_cantidad.get()),
                         ib_proveedor.get(),
                         ib_id.get(),
-                        sqlite3.Binary(datos_imagen)))
+                        sqlite3.Binary(datos_imagen),
+                        ib_costo.get(),
+                        0,
+                        ib_precio_venta.get()))
             messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
                                                                     'enviados correctamente a la base de datos.')
+
         except Exception as ex:
-            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo'
+            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo '
                                                                        'no coincide con la base de datos, verifica los '
                                                                        'datos ingresados.')
+
             reset_all()
             print(ex)
 
         conexion.commit()
         conexion.close()
+        registrar_factura()
         reset_all()
+
+
+    def registrar_factura():
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+
+        try:
+            cursor.execute("INSERT INTO facturas_compras (numero, "
+                           "proveedor, "
+                           "producto, "
+                           "dia, "
+                           "mes, "
+                           "anio, "
+                           "monto_total) "
+                           "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                           (ib_num_factura.get(),
+                            ib_proveedor.get(),
+                            ib_name.get(),
+                            datetime.datetime.today().date().day,
+                            datetime.datetime.today().date().month,
+                            datetime.datetime.today().date().year,
+                            int(ib_cantidad.get()) * int(ib_costo.get())))
+
+        except Exception as ex:
+            print(ex)
+
+        conexion.commit()
+        conexion.close()
 
     def editar():
         # activar input box
@@ -218,7 +264,7 @@ def main():
         ib_name.configure(state="normal")
         ib_desc.configure(state="normal")
         ib_proveedor.configure(state="normal")
-        ib_precio.configure(state="normal")
+        ib_costo.configure(state="normal")
         ib_cantidad.configure(state="normal")
         ib_num_factura.configure(state="normal")
         lb_mostrar_datos.configure(text="", fg_color="transparent")
@@ -255,14 +301,14 @@ def cargar_datos():
     ventana = customtkinter.CTkToplevel()
     ventana.grab_set()
     ventana.title("Compras")
-    ventana.geometry('950x670+50x50')
+    ventana.geometry('950x700+50x50')
     ventana.iconbitmap('icon.ico')
     ventana.resizable(0, 0)
     return ventana
 
 
 def frame1(ventana):
-    frame = customtkinter.CTkFrame(master=ventana)
+    frame = customtkinter.CTkFrame(master=ventana, height=250)
     frame.pack(pady=10, padx=60, fill='both', ipady=60)
 
     return frame
@@ -295,9 +341,9 @@ def labels_parte1(frame, frame2):
     lb_proveedor.pack(pady=400, padx=400)
     lb_proveedor.place(x=10, y=150)
 
-    lb_precio = customtkinter.CTkLabel(master=frame, text='Precio', font=("Times New Roman", 30))
-    lb_precio.pack(pady=400, padx=400)
-    lb_precio.place(x=515, y=160)
+    lb_costo = customtkinter.CTkLabel(master=frame, text='Costo/U', font=("Times New Roman", 30))
+    lb_costo.pack(pady=400, padx=400)
+    lb_costo.place(x=515, y=160)
 
     lb_select_img = customtkinter.CTkLabel(master=frame, text='Seleccionar Imagen', font=("Times New Roman", 30))
     lb_select_img.pack(pady=400, padx=400)
@@ -311,15 +357,19 @@ def labels_parte1(frame, frame2):
     lb_num_factura.pack(pady=400, padx=400)
     lb_num_factura.place(x=10, y=245)
 
+    lb_precio_venta = customtkinter.CTkLabel(master=frame, text='Precio Venta', font=("Times New Roman", 30))
+    lb_precio_venta.pack(pady=400, padx=400)
+    lb_precio_venta.place(x=10, y=290)
+
     # lb
     lb_confirm = customtkinter.CTkLabel(master=frame2, text='Confirmación', font=("Times New Roman", 50, "bold"))
     lb_confirm.pack(pady=400, padx=400, )
     lb_confirm.place(x=10, y=10)
 
-    lb_precio_confi = customtkinter.CTkLabel(master=frame2, text='Precio:      ',
+    lb_costo_confi = customtkinter.CTkLabel(master=frame2, text='Costo:      ',
                                              font=("Times New Roman", 30))
-    lb_precio_confi.pack(pady=400, padx=400)
-    lb_precio_confi.place(x=445, y=140)
+    lb_costo_confi.pack(pady=400, padx=400)
+    lb_costo_confi.place(x=445, y=140)
 
     lb_cantidad_confi = customtkinter.CTkLabel(master=frame2, text='Cantidad:  ',
                                                font=("Times New Roman", 30))
