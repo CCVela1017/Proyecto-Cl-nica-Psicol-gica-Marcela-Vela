@@ -33,8 +33,9 @@ class Bill:
                            "dia, "
                            "mes, "
                            "anio, "
-                           "monto_total) "
-                           "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                           "monto_total, "
+                           "forma_pago) "
+                           "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                            (self.customer["no"],
                             self.customer["name"],
                             self.customer["nit"],
@@ -42,7 +43,8 @@ class Bill:
                             datetime.datetime.today().date().day,
                             datetime.datetime.today().date().month,
                             datetime.datetime.today().date().year,
-                            self.total))
+                            self.total,
+                            self.customer["fpago"]))
 
         except Exception as ex:
             print(ex)
