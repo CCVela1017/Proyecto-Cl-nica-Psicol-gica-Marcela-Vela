@@ -1,13 +1,15 @@
 import os
 import customtkinter
+from tkinter import *
 from PIL import Image
 import compras
 import datos_equipo
 import datos_inventario
 import ventas
+from financiero import financiero
 from usuarios import menu_recursos_humanos
 
-root = customtkinter.CTk()
+
 
 
 def add_image(frame):
@@ -35,9 +37,12 @@ def open_ventas():
     ventas.main()
 
 
-
 def open_menu_recursos():
     menu_recursos_humanos.main()
+
+
+def open_financiero():
+    financiero.main_financiero()
 
 
 def buttons(frame, access: str):
@@ -47,19 +52,22 @@ def buttons(frame, access: str):
                  'equipment': 'disabled',
                  'shop': 'disabled',
                  'ventas': 'normal',
-                 'users': 'disabled'}
+                 'users': 'disabled',
+                 'financial': 'disabled'}
     elif access == 'Administrador':
         state = {'inventory': 'normal',
                  'equipment': 'normal',
                  'shop': 'normal',
                  'ventas': 'normal',
-                 'users': 'normal'}
+                 'users': 'normal',
+                 'financial': 'normal'}
     elif access == 'Gerente':
         state = {'inventory': 'normal',
                  'equipment': 'normal',
                  'shop': 'normal',
                  'ventas': 'normal',
-                 'users': 'disabled'}
+                 'users': 'disabled',
+                 'financial': 'normal'}
 
     button_1 = customtkinter.CTkButton(master=frame, text='Inventario', height=75, width=150, font=("Arial", 20),
                                        command=open_inventory, fg_color="#3E4446", state=state['inventory'])
@@ -71,19 +79,24 @@ def buttons(frame, access: str):
     button_4 = customtkinter.CTkButton(master=frame, text='Ventas', height=75, width=150, font=("Arial", 20),
                                        command=open_ventas, fg_color="#3E4446", state=state['ventas'])
 
-    button_5 = customtkinter.CTkButton(master=frame, text='Recursos Humanos', height=75, width=150, font=("Arial", 20),
+    button_5 = customtkinter.CTkButton(master=frame, text='Recursos\nHumanos', height=75, width=150, font=("Arial", 20),
                                        command=open_menu_recursos, fg_color="#3E4446", state=state['users'])
 
-    button_1.pack(pady=34, padx=10)
-    button_2.pack(pady=34, padx=10)
-    button_3.pack(pady=34, padx=10)
-    button_4.pack(pady=34, padx=10)
-    button_5.pack(pady=10, padx=90)
+    button_6 = customtkinter.CTkButton(master=frame, text='Financiero', height=75, width=150, font=("Arial", 20),
+                                       command=open_financiero, fg_color="#3E4446", state=state['financial'])
+
+    button_1.pack(pady=15, padx=5)
+    button_2.pack(pady=15, padx=5)
+    button_3.pack(pady=15, padx=5)
+    button_4.pack(pady=15, padx=5)
+    button_5.pack(pady=15, padx=5)
+    button_6.pack(pady=15, padx=5)
 
     return
 
 
 def main_window(access_lvl: str):
+    root = Toplevel(background='#1a1a1a')
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
 
@@ -102,7 +115,7 @@ def main_window(access_lvl: str):
     buttons(frame2, access_lvl)
 
     frame.pack()
-    root.geometry('1300x700')
+    root.geometry('1400x855')
     root.mainloop()
 
 
