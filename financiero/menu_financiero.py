@@ -1,27 +1,27 @@
 import customtkinter
 
-from financiero.balance import main_balance
-from financiero.estado_resultados import main_estado_resultados
-from financiero.historial import main_historial
-from financiero.utilidad import main_utilidad
+import financiero.balance 
+import financiero.estado_resultados 
+import financiero.historial  
+import financiero.utilidad 
 
-root = customtkinter.CTk()
+
 
 
 def open_eresultados():
-    main_estado_resultados()
+    financiero.estado_resultados.main_estado_resultados()
 
 
 def open_utilidad():
-    main_utilidad()
+    financiero.utilidad.main_utilidad()
 
 
 def open_balance():
-    main_balance()
+    financiero.balance.main_balance()
 
 
 def open_historial():
-    main_historial()
+    financiero.historial.main_historial()
 
 
 def buttons(frame, frame2):
@@ -46,13 +46,14 @@ def buttons(frame, frame2):
 
 
 def main_financiero():
+    root = customtkinter.CTk()
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
 
     root.title("Menú principal financiero")
     root.iconbitmap('icon.ico')
+    root.grab_set()
     frame = customtkinter.CTkFrame(master=root)
-    root.wm_attributes("-topmost", True)
     frame.pack(pady=10, padx=10, fill='both', expand=True)
     frame2 = customtkinter.CTkFrame(master=frame, fg_color="#212121", width=50)
     frame2.pack(pady=10, padx=8, fill='both', expand=True, side='right')
@@ -64,3 +65,5 @@ def main_financiero():
     frame.pack()
     root.geometry('800x450')
     root.mainloop()
+
+    return
