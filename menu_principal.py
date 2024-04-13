@@ -1,12 +1,12 @@
 import os
 import customtkinter
-from tkinter import *
+from tkinter import Toplevel
 from PIL import Image
 import compras
 import datos_equipo
 import datos_inventario
 import ventas
-from financiero import financiero
+from financiero import menu_financiero
 from usuarios import menu_recursos_humanos
 
 
@@ -42,7 +42,7 @@ def open_menu_recursos():
 
 
 def open_financiero():
-    financiero.main_financiero()
+    menu_financiero.main_financiero()
 
 
 def buttons(frame, access: str):
@@ -96,14 +96,13 @@ def buttons(frame, access: str):
 
 
 def main_window(access_lvl: str):
-    root = Toplevel(background='#1a1a1a')
+    root = customtkinter.CTk()
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
 
     root.title("Menú Principal")
     root.iconbitmap('icon.ico')
     frame = customtkinter.CTkFrame(master=root)
-    root.wm_attributes("-topmost", False)
     frame.pack(pady=10, padx=10, fill='both', expand=True)
     frame2 = customtkinter.CTkFrame(master=frame, fg_color="#212121", width=50)
     frame2.pack(pady=10, padx=10, fill='both', expand=True, side='right')
@@ -115,7 +114,8 @@ def main_window(access_lvl: str):
     buttons(frame2, access_lvl)
 
     frame.pack()
-    root.geometry('1400x855')
+    root.geometry('1400x700')
     root.mainloop()
 
 
+main_window('Administrador')

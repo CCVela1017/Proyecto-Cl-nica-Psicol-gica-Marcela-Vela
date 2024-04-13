@@ -118,10 +118,10 @@ def front_end(frame, frame2):
                     rowheight=25,
                     fieldbackground='#D3D3D3',
                     font=('Times New Roman', 12))
-    style.configure('Treeview.Heading', font=('Times New Roman', 12))
-
     style.map('Treeview',
               background=[('selected', '#347083')])
+
+    style.configure('Treeview.Heading', font=('Times New Roman', 12))
 
     tree_frame = Frame(frame2)
     tree_frame.pack(pady=25)
