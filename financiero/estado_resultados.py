@@ -3,6 +3,9 @@ import tkinter
 from tkinter import *
 from tkinter import ttk
 
+from ventas import productos_vendidos
+from compras import productos_comprados
+
 def boton(lugar):
     """Visualizar"""
     actualizar = customtkinter.CTkButton(master=lugar, text="Visualizar", height=80, width=50,
@@ -61,11 +64,18 @@ def tabla1(lugar):
     my_tree.tag_configure('oddrow', background='black')
     my_tree.tag_configure('evenrow', background='lightblue')
 
-    for idx, fila_id in enumerate(my_tree.get_children()):
-        if idx % 2 == 0:
-            my_tree.item(fila_id, tags=('evenrow',))
+    count = 0
+
+    for indice in productos_vendidos:
+        if count % 2 == 0:
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                             values=(indice[1], indice[3], str(indice[0]) + ' unidades'
+                                     , str(indice[2])), tags=('evenrow',))
         else:
-            my_tree.item(fila_id, tags=('oddrow',))
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                             values=(indice[1], indice[3], str(indice[0]) + ' unidades'
+                                     , str(indice[2])), tags=('oddrow',))
+        count += 1
 
 
 def tabla2(lugar):
@@ -88,10 +98,10 @@ def tabla2(lugar):
         'Producto', 'Costo unitario', 'Cantidad', 'Total')
 
     my_tree.column('#0', width=0, stretch=NO)
-    my_tree.column('Producto', anchor=W, width=120)
-    my_tree.column('Costo unitario', anchor=W, width=100)
-    my_tree.column('Cantidad', anchor=W, width=80)
-    my_tree.column('Total', anchor=W, width=70)
+    my_tree.column('Producto', anchor=W, stretch=NO ,width=120)
+    my_tree.column('Costo unitario', anchor=W, stretch=NO ,width=100)
+    my_tree.column('Cantidad', anchor=W, stretch=NO ,width=80)
+    my_tree.column('Total', anchor=W, stretch=NO ,width=70)
 
     my_tree.heading('#0', text='', anchor=W)
     my_tree.heading('Producto', text='Producto', anchor=W)
@@ -102,11 +112,24 @@ def tabla2(lugar):
     my_tree.tag_configure('oddrow', background='black')
     my_tree.tag_configure('evenrow', background='lightblue')
 
-    for idx, fila_id in enumerate(my_tree.get_children()):
-        if idx % 2 == 0:
-            my_tree.item(fila_id, tags=('evenrow',))
+    count = 0
+
+    for indice in productos_comprados:
+        if count % 2 == 0:
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                           values=(indice[0], indice[1], str(indice[2]) + ' unidades'
+                                   , str(indice[3])), tags=('evenrow',))
         else:
-            my_tree.item(fila_id, tags=('oddrow',))
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                           values=(indice[0], indice[1], str(indice[2]) + ' unidades'
+                                   , str(indice[3])), tags=('oddrow',))
+        count += 1
+
+
+def ganancia_perdida(lugar):
+    pass
+
+
 
 
 def main_estado_resultados():
@@ -127,6 +150,7 @@ def main_estado_resultados():
     tabla1(marco)
     tabla2(marco)
     boton(marco)
+    ganancia_perdida(marco)
 
     root.geometry('800x450')
     root.mainloop()
