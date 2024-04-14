@@ -1,3 +1,6 @@
+import sqlite3
+from tkinter import messagebox
+
 import customtkinter
 import datetime
 
@@ -49,11 +52,39 @@ def main_utilidad():
         red = int(ib_red.get())
         root.geometry('370x365')
 
-        total = alquiler + energia + transporte + red
+        total = int(alquiler + energia + transporte + red)
 
         lb_total = customtkinter.CTkLabel(master=frame, text='Total: ' + str(total), font=(" ", 25))
         lb_total.pack(pady=400, padx=400)
         lb_total.place(x=10, y=275)
+
+
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+
+        try:
+            cursor.execute("INSERT INTO utilidad_bruta (costo_alquiler, "
+                           "costo_energia, "
+                           "costo_transporte, "
+                           "costo_red, "
+                           "costo_planilla, "
+                           "fecha, "
+                           "total) "
+                           "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                       (alquiler, energia, transporte, red, 0, fecha, total))
+            messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
+                                                                    'enviados correctamente a la base de datos.')
+
+        except Exception as ex:
+            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo '
+                                                                       'no coincide con la base de datos, verifica los '
+                                                                       'datos ingresados.')
+
+            print(ex)
+
+        conexion.commit()
+        conexion.close()
+
 
     button_confirmar = customtkinter.CTkButton(master=frame, text="Confirmar",
                                                command=guardar_datos)
