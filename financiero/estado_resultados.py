@@ -1,12 +1,9 @@
 import datetime
-
 import customtkinter
 import tkinter
 from tkinter import *
 from tkinter import ttk
 import sqlite3
-from ventas import productos_vendidos
-from compras import productos_comprados
 
 
 fecha_actual = datetime.datetime.now()
@@ -14,7 +11,6 @@ mes_actual = fecha_actual.month
 anio_actual = fecha_actual.year
 
 fecha_ahorita = str(mes_actual) + str(anio_actual)
-
 
 
 def cargar_base_de_datos_ventas():
@@ -45,14 +41,15 @@ def cargar_base_de_datos_compras():
         print(ex)
 
 
-def boton(lugar):
-    """Visualizar"""
-    actualizar = customtkinter.CTkButton(master=lugar, text="Visualizar", height=80, width=50,
-                                         font=("times new roman", 20, "bold"),
-                                         fg_color="#3E4446")
-    actualizar.place(x=630, y=280)
+def obtener_columna(my_tree):
+    total = 0
+    for item in my_tree.get_children():
+        valor = float(my_tree.item(item, "values")[4])
+        total += valor
+    return total
 
-def textos(lugar):
+
+def textos(lugar, total_vendido, total_comprado):
     """Servicios vendidos"""
     etiqueta = customtkinter.CTkLabel(master=lugar, text="Servicios dados:",
                                       font=("times new roman", 22, "bold"))
@@ -64,9 +61,13 @@ def textos(lugar):
     etiqueta.place(x=419, y=23)
 
     """Ganancias y Pérdidas"""
-    etiqueta = customtkinter.CTkLabel(master=lugar, text="Este mes obtuvo una:",
-                                      font=("times new roman", 32, "bold"))
-    etiqueta.place(x=50, y=300)
+    lb_total_vendido = customtkinter.CTkLabel(master=lugar, text="total vendido: " + str(total_vendido),
+                                              font=("times new roman", 32, "bold"))
+    lb_total_vendido.place(x=10, y=300)
+
+    lb_total_comprado = customtkinter.CTkLabel(master=lugar, text="total comprado: " + str(total_comprado),
+                                               font=("times new roman", 32, "bold"))
+    lb_total_comprado.place(x=10, y=350)
 
 
 def tabla1(lugar):
@@ -125,10 +126,9 @@ def tabla1(lugar):
                 my_tree.insert(parent='', index='end', iid=count, text='',
                                values=(record[0], record[1], record[3], fecha, record[8],
                                        ), tags=('oddrow',))
-
         count += 1
-
-    return
+    ventas_totales = obtener_columna(my_tree)
+    return ventas_totales
 
 
 def tabla2(lugar):
@@ -186,10 +186,8 @@ def tabla2(lugar):
                                  values=(record[0], record[1], record[3], fecha, record[7],
                                          ), tags=('oddrow',))
         count += 1
-
-
-def ganancia_perdida(lugar):
-    pass
+    compras_totales = obtener_columna(my_tree_2)
+    return compras_totales
 
 
 def main_estado_resultados():
@@ -204,12 +202,10 @@ def main_estado_resultados():
     marco = customtkinter.CTkFrame(master=root, width=780, height=430)
     marco.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
 
+    ventas_totales = tabla1(marco)
+    compras_totales = tabla2(marco)
 
-    textos(marco)
-    tabla1(marco)
-    tabla2(marco)
-    boton(marco)
-    ganancia_perdida(marco)
+    textos(marco, ventas_totales, compras_totales)
 
     root.geometry('800x450')
     root.mainloop()
