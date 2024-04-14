@@ -1,4 +1,5 @@
 import customtkinter
+import datetime
 
 
 def main_utilidad():
@@ -14,6 +15,12 @@ def main_utilidad():
     frame.pack(pady=10, padx=10, fill='both', expand=True)
     frame2 = customtkinter.CTkFrame(master=frame, fg_color="#212121", width=50)
     frame2.pack(pady=10, padx=8, fill='both', expand=True, side='right')
+
+    fecha_actual = datetime.datetime.now()
+    mes_actual = fecha_actual.month
+    anio_actual = fecha_actual.year
+
+    fecha = str(mes_actual) + str(anio_actual)
 
     ib_alquiler = customtkinter.CTkEntry(master=frame, placeholder_text='A')
     ib_alquiler.pack(pady=12, padx=10)
