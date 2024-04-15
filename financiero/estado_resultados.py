@@ -185,7 +185,8 @@ def textos(lugar, total_vendido, total_comprado, lista_utilidad_bruta):
                            "fecha = ?, "
                            "total_con_iva = ?, "
                            "total_sin_iva = ?",
-                           (total_vendido, total_comprado, lista_utilidad_bruta[7], fecha_ahorita, lb_total_con_isr, total_sin_isr))
+                           (total_vendido, total_comprado, lista_utilidad_bruta[7], fecha_ahorita,
+                            total_con_isr, total_sin_isr))
             conexion.commit()  # Guarda los cambios en la base de datos
             messagebox.showinfo('¡Datos Modificados Correctamente!',
                                 'Los datos ingresados fueron enviados correctamente a la base de datos.')
