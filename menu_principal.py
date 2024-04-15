@@ -10,8 +10,6 @@ from financiero import menu_financiero
 from usuarios import menu_recursos_humanos
 
 
-
-
 def add_image(frame):
     image_path = os.path.join(os.path.dirname(__file__), 'icon.png')
     image = customtkinter.CTkImage(light_image=Image.open(image_path), size=(450, 450))
@@ -118,3 +116,4 @@ def main_window(access_lvl: str):
     root.mainloop()
 
 
+main_window('Administrador')
