@@ -10,7 +10,7 @@ import sqlite3
 
 global texto_imagen
 
-productos_comprados = []
+
 def main():
     ventana = cargar_datos()
     frame = frame1(ventana)
@@ -214,17 +214,6 @@ def main():
                         ib_costo.get(),
                         0,
                         ib_precio_venta.get()))
-
-            """▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"""
-
-            nombre = ib_name.get()
-            costo_unitario = ib_costo.get()
-            cantidad_comprada = ib_cantidad.get()
-            total_gastado = int(ib_costo.get()) * int(ib_cantidad.get())
-            productos_comprados.append(nombre, costo_unitario, cantidad_comprada, total_gastado)
-
-
-            """▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"""
             messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
                                                                     'enviados correctamente a la base de datos.')
 

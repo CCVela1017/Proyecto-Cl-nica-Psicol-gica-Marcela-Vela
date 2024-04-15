@@ -8,7 +8,7 @@ import datos_inventario
 import ventas
 from financiero import menu_financiero
 from usuarios import menu_recursos_humanos
-from compras_files import menu_compras
+
 
 
 
@@ -30,7 +30,7 @@ def open_equipment():
 
 
 def open_shop():
-    menu_compras.main()
+    compras.main()
 
 
 def open_ventas():

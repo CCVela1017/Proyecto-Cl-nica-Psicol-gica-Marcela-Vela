@@ -72,7 +72,7 @@ def main():
     cb_estado_civil.pack(pady=400, padx=400, )
     cb_estado_civil.place(x=200, y=250)
 
-    cal = DateEntry(frame, width=50, bg="darkblue", fg="white", year=2024, height=50)
+    cal = DateEntry(frame, width=50, bg="darkblue", fg="white", year=2023, height=50)
     cal.place(x=350, y=140)
 
     # parte 2
