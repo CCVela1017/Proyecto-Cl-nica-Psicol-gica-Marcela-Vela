@@ -7,7 +7,7 @@ from PIL import Image
 import sqlite3
 import os
 
-ventana = Toplevel(background='#1a1a1a')
+ventana = customtkinter.CTk()
 
 vector_ejemplo = [['Eduardo', 'pbkdf2:sha256:600000$RgGwUg'
                               'LipocaPSMN$aa01597732c3c7620'

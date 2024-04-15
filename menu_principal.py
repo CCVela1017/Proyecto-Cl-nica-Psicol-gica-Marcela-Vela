@@ -96,7 +96,7 @@ def buttons(frame, access: str):
 
 
 def main_window(access_lvl: str):
-    root = customtkinter.CTk()
+    root = customtkinter.CTkToplevel()
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
 
@@ -118,4 +118,3 @@ def main_window(access_lvl: str):
     root.mainloop()
 
 
-main_window('Administrador')
