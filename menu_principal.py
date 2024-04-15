@@ -115,5 +115,6 @@ def main_window(access_lvl: str):
     root.geometry('1400x700')
     root.mainloop()
 
-
 main_window('Administrador')
+
+
