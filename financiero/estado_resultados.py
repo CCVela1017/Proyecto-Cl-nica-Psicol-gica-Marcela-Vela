@@ -13,6 +13,25 @@ anio_actual = fecha_actual.year
 fecha_ahorita = str(mes_actual) + str(anio_actual)
 
 
+def cargar_base_de_datos_utilidad_bruta():
+    try:
+        data = []
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+        cursor.execute('SELECT * FROM utilidad_bruta')
+        rows = cursor.fetchall()
+        for row in rows:
+            data.append(row)
+        lista = []
+        for item in data:
+            fecha_evaluado = item[6]
+            if str(fecha_ahorita) == str(fecha_evaluado):
+                lista = item
+        return lista
+    except Exception as ex:
+        print(ex)
+
+
 def cargar_base_de_datos_ventas():
     try:
         data = []
@@ -49,7 +68,7 @@ def obtener_columna(my_tree):
     return total
 
 
-def textos(lugar, total_vendido, total_comprado):
+def textos(lugar, total_vendido, total_comprado, lista_utilidad_bruta):
     """Servicios vendidos"""
     etiqueta = customtkinter.CTkLabel(master=lugar, text="Servicios dados:",
                                       font=("times new roman", 22, "bold"))
@@ -62,12 +81,47 @@ def textos(lugar, total_vendido, total_comprado):
 
     """Ganancias y Pérdidas"""
     lb_total_vendido = customtkinter.CTkLabel(master=lugar, text="total vendido: " + str(total_vendido),
-                                              font=("times new roman", 32, "bold"))
-    lb_total_vendido.place(x=10, y=300)
+                                              font=(" ", 32))
+    lb_total_vendido.place(x=39, y=300)
 
     lb_total_comprado = customtkinter.CTkLabel(master=lugar, text="total comprado: " + str(total_comprado),
-                                               font=("times new roman", 32, "bold"))
-    lb_total_comprado.place(x=10, y=350)
+                                               font=(" ", 32))
+    lb_total_comprado.place(x=39, y=350)
+
+
+    lb_alquiler = customtkinter.CTkLabel(master=lugar, text='Alquiler: ' + str(lista_utilidad_bruta[1]), font=(" ", 32))
+    lb_alquiler.pack(pady=400, padx=400, )
+    lb_alquiler.place(x=39, y=400)
+
+    lb_energeticos = customtkinter.CTkLabel(master=lugar, text='Energeticos: ' + str(lista_utilidad_bruta[2]),
+                                            font=(" ", 32))
+    lb_energeticos.pack(pady=400, padx=400, )
+    lb_energeticos.place(x=39, y=450)
+
+    lb_transporte = customtkinter.CTkLabel(master=lugar, text='Transporte: ' + str(lista_utilidad_bruta[3]),
+                                           font=(" ", 32))
+    lb_transporte.pack(pady=400, padx=400)
+    lb_transporte.place(x=39, y=500)
+
+    lb_red = customtkinter.CTkLabel(master=lugar, text='Red: ' + str(lista_utilidad_bruta[4]), font=(" ", 32))
+    lb_red.pack(pady=400, padx=400)
+    lb_red.place(x=39, y=550)
+
+    lb_planilla = customtkinter.CTkLabel(master=lugar, text='Planilla: ' + str(lista_utilidad_bruta[5]), font=(" ", 32))
+    lb_planilla.pack(pady=400, padx=400)
+    lb_planilla.place(x=39, y=600)
+
+    total_sin_isr = total_vendido - total_comprado - float(lista_utilidad_bruta[7])
+
+    lb_total_sin_isr = customtkinter.CTkLabel(master=lugar, text='Total SIN ISR: ' + str(total_sin_isr), font=(" ", 32))
+    lb_total_sin_isr.pack(pady=400, padx=400)
+    lb_total_sin_isr.place(x=39, y=650)
+
+    total_con_isr = total_vendido - (total_vendido * 0.05) - total_comprado - float(lista_utilidad_bruta[7])
+
+    lb_total_con_isr = customtkinter.CTkLabel(master=lugar, text='Total Con ISR: ' + str(total_con_isr), font=(" ", 32))
+    lb_total_con_isr.pack(pady=400, padx=400)
+    lb_total_con_isr.place(x=450, y=650)
 
 
 def tabla1(lugar):
@@ -194,18 +248,18 @@ def main_estado_resultados():
     root = customtkinter.CTk()
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
-
+    lista_utilidad_bruta = (cargar_base_de_datos_utilidad_bruta())
     root.title("Estado de resultados")
     root.iconbitmap('icon.ico')
     root.wm_attributes("-topmost", True)
 
-    marco = customtkinter.CTkFrame(master=root, width=780, height=430)
-    marco.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER)
+    frame = customtkinter.CTkFrame(master=root)
+    frame.pack(pady=10, padx=10, fill='both', expand=True)
 
-    ventas_totales = tabla1(marco)
-    compras_totales = tabla2(marco)
+    ventas_totales = tabla1(frame)
+    compras_totales = tabla2(frame)
 
-    textos(marco, ventas_totales, compras_totales)
+    textos(frame, ventas_totales, compras_totales, lista_utilidad_bruta)
 
-    root.geometry('800x450')
+    root.geometry('840x720')
     root.mainloop()
