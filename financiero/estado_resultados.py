@@ -267,7 +267,7 @@ def tabla1(lugar):
             if fecha_a_evaluar == fecha_ahorita:
                 fecha = str(record[5] + "/" + record[6] + "/" + record[7])
                 my_tree.insert(parent='', index='end', iid=count, text='',
-                               values=(record[0], record[1], record[3], fecha, record[8],
+                               values=(record[1], record[2], record[3], fecha, record[8],
                                        ), tags=('oddrow',))
         count += 1
     ventas_totales = obtener_columna(my_tree)
@@ -323,7 +323,7 @@ def tabla2(lugar):
             if fecha_a_evaluar == fecha_ahorita:
                 fecha = str(record[4] + "/" + record[5] + "/" + record[6])
                 my_tree_2.insert(parent='', index='end', iid=count, text='',
-                                 values=(record[0], record[1], record[3], fecha, record[7],
+                                 values=(record[1], record[2], record[3], fecha, record[7],
                                          ), tags=('oddrow',))
         count += 1
     compras_totales = obtener_columna(my_tree_2)

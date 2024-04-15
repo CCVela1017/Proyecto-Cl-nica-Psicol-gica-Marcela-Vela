@@ -218,7 +218,7 @@ def cargar_tabla_ac(frame):
             for fila in filas_caja:
                 caja1 += fila[0]
 
-            cursor.execute("SELECT monto_total FROM facturas_ventas WHERE mes = ? and forma_pago = 'Cheque'"
+            cursor.execute("SELECT monto_total FROM facturas_ventas WHERE mes = ? and forma_pago = 'Transferencia'"
                            , (str(mes),))
 
             filas_banco = cursor.fetchall()
