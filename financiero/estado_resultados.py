@@ -104,11 +104,11 @@ def textos(lugar, total_vendido, total_comprado, lista_utilidad_bruta):
     etiqueta.place(x=419, y=23)
 
     """Ganancias y Pérdidas"""
-    lb_total_vendido = customtkinter.CTkLabel(master=lugar, text="total vendido: " + str(total_vendido),
+    lb_total_vendido = customtkinter.CTkLabel(master=lugar, text="Total Vendido: " + str(total_vendido),
                                               font=(" ", 32))
     lb_total_vendido.place(x=39, y=300)
 
-    lb_total_comprado = customtkinter.CTkLabel(master=lugar, text="total comprado: " + str(total_comprado),
+    lb_total_comprado = customtkinter.CTkLabel(master=lugar, text="Total Comprado: " + str(total_comprado),
                                                font=(" ", 32))
     lb_total_comprado.place(x=39, y=350)
 
@@ -117,7 +117,7 @@ def textos(lugar, total_vendido, total_comprado, lista_utilidad_bruta):
     lb_alquiler.pack(pady=400, padx=400, )
     lb_alquiler.place(x=39, y=400)
 
-    lb_energeticos = customtkinter.CTkLabel(master=lugar, text='Energeticos: ' + str(lista_utilidad_bruta[2]),
+    lb_energeticos = customtkinter.CTkLabel(master=lugar, text='Energéticos: ' + str(lista_utilidad_bruta[2]),
                                             font=(" ", 32))
     lb_energeticos.pack(pady=400, padx=400, )
     lb_energeticos.place(x=39, y=450)
@@ -137,13 +137,14 @@ def textos(lugar, total_vendido, total_comprado, lista_utilidad_bruta):
 
     total_sin_isr = total_vendido - total_comprado - float(lista_utilidad_bruta[7])
 
-    lb_total_sin_isr = customtkinter.CTkLabel(master=lugar, text='Total SIN ISR: ' + str(total_sin_isr), font=(" ", 32))
+    lb_total_sin_isr = customtkinter.CTkLabel(master=lugar, text='Total SIN IMP: ' + str(total_sin_isr), font=(" ", 32))
     lb_total_sin_isr.pack(pady=400, padx=400)
     lb_total_sin_isr.place(x=39, y=650)
 
     total_con_isr = total_vendido - (total_vendido * 0.05) - total_comprado - float(lista_utilidad_bruta[7])
 
-    lb_total_con_isr = customtkinter.CTkLabel(master=lugar, text='Total Con ISR: ' + str(total_con_isr), font=(" ", 32))
+    lb_total_con_isr = customtkinter.CTkLabel(master=lugar, text='Total Con IMP: ' + str(round(total_con_isr, 2))
+                                              , font=(" ", 32))
     lb_total_con_isr.pack(pady=400, padx=400)
     lb_total_con_isr.place(x=450, y=650)
 
@@ -200,18 +201,35 @@ def textos(lugar, total_vendido, total_comprado, lista_utilidad_bruta):
 
 def tabla1(lugar):
     """Tabla"""
-    tabla = Frame(lugar)
-    tabla.pack(pady=70)
+    style = ttk.Style()
+    style.theme_use("default")
 
-    tabla.place(x=39, y=91)
+    style.configure("Treeview",
+                    background="#2a2d2e",
+                    foreground="white",
+                    rowheight=25,
+                    fieldbackground="#343638",
+                    bordercolor="#343638",
+                    borderwidth=0,
+                    font=('Times New Roman', 15))
+    style.map('Treeview', background=[('selected', '#22559b')])
 
-    tabla_scroll = Scrollbar(tabla)
-    tabla_scroll.pack(side=RIGHT, fill=Y)
-    my_tree = ttk.Treeview(tabla, yscrollcommand=tabla_scroll.set, selectmode='extended')
+    style.configure("Treeview.Heading",
+                    background="#565b5e",
+                    foreground="white",
+                    relief="flat",
+                    font=('Times New Roman', 15))
+    style.map("Treeview.Heading",
+              background=[('active', '#3484F0')])
+
+    tree_frame = ttk.Frame(lugar)
+
+    tree_frame.pack(pady=25)
+    tree_frame.place(x=40, y=91)
+
+    my_tree = ttk.Treeview(tree_frame, selectmode='extended')
 
     my_tree.pack()
-
-    tabla_scroll.config(command=my_tree.yview)
 
     my_tree['columns'] = (
         'No. Factura', 'Nombre', 'NIT', 'Fecha', 'Total')
@@ -229,9 +247,6 @@ def tabla1(lugar):
     my_tree.heading('NIT',  text='NIT', anchor=W)
     my_tree.heading('Fecha', text='Fecha', anchor=W)
     my_tree.heading('Total', text='Total', anchor=W)
-
-    my_tree.tag_configure('oddrow', background='black')
-    my_tree.tag_configure('evenrow', background='lightblue')
 
     count = 0
     data = cargar_base_de_datos_ventas()
@@ -291,9 +306,6 @@ def tabla2(lugar):
     my_tree_2.heading('Fecha', text='Fecha', anchor=W)
     my_tree_2.heading('Total', text='Total', anchor=W)
 
-    my_tree_2.tag_configure('oddrow', background='black')
-    my_tree_2.tag_configure('evenrow', background='lightblue')
-
     count = 0
     data = cargar_base_de_datos_compras()
     for record in data:
@@ -319,7 +331,7 @@ def tabla2(lugar):
 
 
 def main_estado_resultados():
-    root = customtkinter.CTk()
+    root = customtkinter.CTkToplevel()
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
     lista_utilidad_bruta = (cargar_base_de_datos_utilidad_bruta())

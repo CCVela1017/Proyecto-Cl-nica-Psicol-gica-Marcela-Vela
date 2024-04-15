@@ -1,5 +1,6 @@
 from fpdf import FPDF
 
+
 class BalancePDF:
     def __init__(self, balance: dict):
         self.balance = balance
@@ -53,12 +54,7 @@ class BalancePDF:
             fila.cell(f'Q{self.balance["mobiliario"]}')
             fila.cell('')
             fila = tabla.row()
-            fila.cell('OTROS', colspan=4)
-            fila = tabla.row()
-            fila.cell('3100')
-            fila.cell('Patrimonio Neto')
-            fila.cell(f'Q{self.balance["patrimonio"]}')
-            fila.cell('')
+            fila.cell('PATRIMONIO NETO', colspan=4)
             fila = tabla.row()
             fila.cell('3210')
             fila.cell('Capital Social')
@@ -71,8 +67,8 @@ class BalancePDF:
             fila.cell(f'Q{self.balance["utilidades_r"]}')
             fila = tabla.row()
             fila.cell('Sumas iguales', colspan=2)
-            fila.cell(self.balance["total"])
-            fila.cell(self.balance["total"])
+            fila.cell(f'Q{self.balance["total"]}')
+            fila.cell(f'Q{self.balance["total"]}')
 
         # Genero factura en un pdf
         pdf.output(f'LibroBalance{self.balance["month"]}{self.balance["year"]}.pdf')

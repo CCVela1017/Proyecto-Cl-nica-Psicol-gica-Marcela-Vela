@@ -2,7 +2,17 @@ import customtkinter
 from tkinter import ttk
 from tkinter import *
 from financiero.pdf_balance import BalancePDF
+import datetime
+import sqlite3
 
+caja = 0
+bancos = 0
+papeleria = 0
+mob = 0
+patriomonio = 17590
+utilidades = 0
+mes = ''
+anio = datetime.datetime.now().year
 
 def frame1(ventana):
     frame = customtkinter.CTkFrame(master=ventana)
@@ -57,22 +67,41 @@ def main_balance():
 def print_balance():
     # Ejemplo de balance
     dict_balance = {
-        'month': 'Marzo',
-        'year': '2024',
-        'caja': '40000',
-        'banco': '20000',
-        'papeleria': '7440',
-        'mobiliario': '74440',
-        'patrimonio': '77778889',
-        'capital_s': '5444',
-        'utilidades_r': '1100',
-        'total': '7111000'
+        'month': str(mes),
+        'year': str(anio),
+        'caja': str(caja),
+        'banco': str(bancos),
+        'papeleria': str(papeleria),
+        'mobiliario': str(mob),
+        'capital_s': str(patriomonio),
+        'utilidades_r': str(round(utilidades, 2)),
+        'total': str(caja + bancos + papeleria + mob),
     }
     pddf = BalancePDF(dict_balance)
     pddf.print_balance()
 
 
 def cargar_tabla_anc(frame):
+    def activo_nc() -> int:
+        try:
+
+            mob_equip1 = 0
+
+            conexion2 = sqlite3.connect('src/database')
+            cursor1 = conexion2.cursor()
+            cursor1.execute("SELECT cantidad *  (costo - (costo * 0.2)) FROM objetos_de_equipo WHERE ID <= 7")
+            filas_mob = cursor1.fetchall()
+
+            for fila in filas_mob:
+                mob_equip1 += fila[0]
+
+            conexion2.close()
+
+            return mob_equip1
+
+        except Exception as ex:
+            print(ex)
+
     style = ttk.Style()
 
     style.theme_use("default")
@@ -118,7 +147,10 @@ def cargar_tabla_anc(frame):
     my_tree.heading('Crédito', text='Crédito', anchor=W)
 
     '''Vector de ejemplo'''
-    data = [['1224', 'Mobiliario y Equipo', '', '']]
+    global mob
+    mob = activo_nc()
+
+    data = [['1224', 'Mobiliario y Equipo', str(mob), '']]
 
     count = 0
 
@@ -167,9 +199,57 @@ def cargar_tabla_ac(frame):
     my_tree.heading('Crédito', text='Crédito', anchor=W)
 
     '''Vector de ejemplo'''
-    data = [['1111', 'Caja', '', ''],
-            ['1112', 'Bancos', '', ''],
-            ['1174', 'Papelería y útiles', '', '']]
+    def activos() -> tuple:
+        try:
+
+            caja1 = 0
+            bancos1 = 0
+            papeleria1 = 0
+
+            conexion = sqlite3.connect('src/database')
+            cursor = conexion.cursor()
+            fecha = datetime.datetime.now()
+            global mes
+            mes = fecha.month
+            cursor.execute("SELECT monto_total FROM facturas_ventas WHERE mes = ? and forma_pago = 'Caja'"
+                           , (str(mes),))
+            filas_caja = cursor.fetchall()
+
+            for fila in filas_caja:
+                caja1 += fila[0]
+
+            cursor.execute("SELECT monto_total FROM facturas_ventas WHERE mes = ? and forma_pago = 'Cheque'"
+                           , (str(mes),))
+
+            filas_banco = cursor.fetchall()
+
+            for fila in filas_banco:
+                bancos1 += fila[0]
+
+            cursor.execute("SELECT costo_uni * cantidad FROM objetos_de_inventario WHERE "
+                           "Nombre = 'Hojas de pruebas proyectivas'")
+
+            filas_papeles = cursor.fetchall()
+
+            for fila in filas_papeles:
+                papeleria1 += fila[0]
+
+            conexion.close()
+
+            return caja1, bancos1, papeleria1
+
+        except Exception as ex:
+            print(ex)
+    global caja
+    caja = activos()[0]
+    global bancos
+    bancos = activos()[1]
+    global papeleria
+    papeleria = activos()[2]
+
+    data = [['1111', 'Caja', str(caja), ''],
+            ['1112', 'Bancos', str(bancos), ''],
+            ['1174', 'Papelería y útiles', str(papeleria), '']]
 
     count = 0
 
@@ -212,7 +292,7 @@ def cargar_tabla_otros(frame):
     tree_frame.pack(pady=25)
     tree_frame.place(y=315, x=180)
 
-    my_tree = ttk.Treeview(tree_frame, selectmode='extended', height=3)
+    my_tree = ttk.Treeview(tree_frame, selectmode='extended', height=2)
     my_tree.pack()
 
     my_tree['columns'] = ('Código', 'Cuenta', 'Débito', 'Crédito')
@@ -230,9 +310,11 @@ def cargar_tabla_otros(frame):
     my_tree.heading('Crédito', text='Crédito', anchor=W)
 
     '''Vector de ejemplo'''
-    data = [['3100', 'Patrimonio Neto', '', ''],
-            ['3210', 'Capital Social', '', ''],
-            ['', 'Utilidades retenidas', '', '']]
+    global utilidades
+    utilidades = caja + bancos + papeleria + mob - patriomonio
+
+    data = [['3210', 'Capital Social', '', '17590'],
+            ['', 'Utilidades retenidas', '', round(utilidades, 2)]]
 
     count = 0
 
@@ -257,7 +339,7 @@ def labels_entry(frame):
     lb_nac.pack(pady=400, padx=400)
     lb_nac.place(x=145, y=140)
 
-    lb_otras = customtkinter.CTkLabel(master=frame, text="Otras cuentas: ", font=("Times New Roman", 20))
+    lb_otras = customtkinter.CTkLabel(master=frame, text="Patrimonio Neto: ", font=("Times New Roman", 20))
     lb_otras.pack(pady=400, padx=400)
     lb_otras.place(x=145, y=220)
 
@@ -266,11 +348,11 @@ def labels_entry(frame):
     lb_sumas.place(x=145, y=340)
 
     en_cred = customtkinter.CTkEntry(master=frame, width=100,
-                                     height=10)
+                                     height=10, placeholder_text=str(caja + bancos + papeleria + mob))
     en_cred.pack(pady=100, padx=10)
     en_cred.place(x=350, y=345)
 
     en_deb = customtkinter.CTkEntry(master=frame, width=100,
-                                    height=10)
+                                    height=10, placeholder_text=str(patriomonio + utilidades))
     en_deb.pack(pady=100, padx=10)
     en_deb.place(x=510, y=345)
