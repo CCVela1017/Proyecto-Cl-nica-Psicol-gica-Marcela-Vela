@@ -337,3 +337,4 @@ def main_estado_resultados():
 
     root.geometry('840x720')
     root.mainloop()
+    
