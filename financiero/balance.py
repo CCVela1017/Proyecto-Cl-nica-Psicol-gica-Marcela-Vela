@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import *
 from financiero.pdf_balance import BalancePDF
 
+
 def frame1(ventana):
     frame = customtkinter.CTkFrame(master=ventana)
     frame.pack(pady=10, padx=60, fill='both', ipady=60)
@@ -45,11 +46,13 @@ def main_balance():
     cargar_tabla_otros(frame)
     labels_entry(frame)
 
-    btn_print = customtkinter.CTkButton(master=frame, text='Imprimir PDF', width=475, command=print_balance, state='normal')
+    btn_print = customtkinter.CTkButton(master=frame, text='Imprimir PDF', width=475, command=print_balance,
+                                        state='normal')
     btn_print.pack(pady=100, padx=10)
     btn_print.place(x=140, y=390)
 
     root.mainloop()
+
 
 def print_balance():
     # Ejemplo de balance
@@ -127,7 +130,6 @@ def cargar_tabla_anc(frame):
             my_tree.insert(parent='', index='end', iid=count, text='',
                            values=(record[0], record[1], record[2], record[3]), tags=('oddrow',))
         count += 1
-
 
     return
 
@@ -245,6 +247,7 @@ def cargar_tabla_otros(frame):
 
     return
 
+
 def labels_entry(frame):
     lb_ac = customtkinter.CTkLabel(master=frame, text="Activos Corrientes: ", font=("Times New Roman", 20))
     lb_ac.pack(pady=400, padx=400)
@@ -268,6 +271,6 @@ def labels_entry(frame):
     en_cred.place(x=350, y=345)
 
     en_deb = customtkinter.CTkEntry(master=frame, width=100,
-                                     height=10)
+                                    height=10)
     en_deb.pack(pady=100, padx=10)
     en_deb.place(x=510, y=345)
