@@ -13,7 +13,7 @@ global no_factura
 global matriz
 global forma_pago
 
-
+productos_vendidos = []
 def frame1(ventana):
     frame = customtkinter.CTkFrame(master=ventana)
     frame.pack(pady=10, padx=90, fill='both', ipady=0)
@@ -339,6 +339,15 @@ def labels_parte2(frame, frame_3):
             cantidad = my_tree.item(item, "values")[1]
             nombre_list = my_tree.item(item, "values")[0]
             monto_list = float(my_tree.item(item, "values")[3])
+            """▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"""
+            precio_list = float(my_tree.item(item, "values")[2])
+
+            productos_vendidos.append(cantidad)
+            productos_vendidos.append(nombre_list)
+            productos_vendidos.append(monto_list)
+            productos_vendidos.append(precio_list)
+
+            """▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"""
             lista.append(cantidad)
             lista.append(nombre_list)
             lista.append(monto_list)
