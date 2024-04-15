@@ -5,12 +5,33 @@ import customtkinter
 import datetime
 
 
+def cargar_base_de_datos_utilidad_bruta():
+    try:
+        data = []
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+        cursor.execute('SELECT * FROM utilidad_bruta')
+        rows = cursor.fetchall()
+        for row in rows:
+            data.append(row)
+        lista = []
+        for item in data:
+            contador = 0
+            for datos in item:
+                if contador == 6:
+                    lista.append(datos)
+                contador += 1
+        return lista
+    except Exception as ex:
+        print(ex)
+
+
 def main_utilidad():
     root = customtkinter.CTk()
-
+    lista_de_fechas = cargar_base_de_datos_utilidad_bruta()
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
-
+    editar = False
     root.title("Utilidad Bruta")
     root.iconbitmap('icon.ico')
     frame = customtkinter.CTkFrame(master=root)
@@ -46,45 +67,67 @@ def main_utilidad():
     ib_planillla.place(x=150, y=210)
 
     def guardar_datos():
+        global editar
         alquiler = int(ib_alquiler.get())
         energia = int(ib_energeticos.get())
         transporte = int(ib_transporte.get())
         red = int(ib_red.get())
         root.geometry('370x365')
-
         total = int(alquiler + energia + transporte + red)
 
         lb_total = customtkinter.CTkLabel(master=frame, text='Total: ' + str(total), font=(" ", 25))
         lb_total.pack(pady=400, padx=400)
         lb_total.place(x=10, y=275)
 
-
         conexion = sqlite3.connect('src/database')
         cursor = conexion.cursor()
+        for i in lista_de_fechas:
+            if str(i) == str(fecha):
+                editar = True
 
-        try:
-            cursor.execute("INSERT INTO utilidad_bruta (costo_alquiler, "
-                           "costo_energia, "
-                           "costo_transporte, "
-                           "costo_red, "
-                           "costo_planilla, "
-                           "fecha, "
-                           "total) "
-                           "VALUES (?, ?, ?, ?, ?, ?, ?)",
-                       (alquiler, energia, transporte, red, 0, fecha, total))
-            messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
-                                                                    'enviados correctamente a la base de datos.')
+        if editar is False:
+            try:
+                cursor.execute("INSERT INTO utilidad_bruta (costo_alquiler, "
+                               "costo_energia, "
+                               "costo_transporte, "
+                               "costo_red, "
+                               "costo_planilla, "
+                               "fecha, "
+                               "total) "
+                               "VALUES (?, ?, ?, ?, ?, ?, ?)",
+                               (alquiler, energia, transporte, red, 0, fecha, total))
+                messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
+                                                                        'enviados correctamente a la base de datos.')
 
-        except Exception as ex:
-            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo '
-                                                                       'no coincide con la base de datos, verifica los '
-                                                                       'datos ingresados.')
+            except Exception as ex:
+                messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo '
+                                                                           'no coincide con la base de datos, verifica los '
+                                                                           'datos ingresados.')
 
-            print(ex)
+                print(ex)
+                conexion.commit()
+                conexion.close()
 
-        conexion.commit()
-        conexion.close()
-
+        else:
+            try:
+                cursor.execute("UPDATE utilidad_bruta SET costo_alquiler = ?, "
+                               "costo_energia = ?, "
+                               "costo_transporte = ?, "
+                               "costo_red = ?, "
+                               "costo_planilla = ?, "
+                               "fecha = ?, "
+                               "total = ?",
+                               (alquiler, energia, transporte, red, 0, fecha, total))
+                conexion.commit()  # Guarda los cambios en la base de datos
+                messagebox.showinfo('¡Datos Modificados Correctamente!',
+                                    'Los datos ingresados fueron enviados correctamente a la base de datos.')
+            except sqlite3.Error as ex:
+                messagebox.showerror('¡Error al Modificar Datos!',
+                                     'parece que un campo no coincide con la base de datos, verifica los datos ingresados.')
+                print(ex)
+            finally:
+                if conexion:
+                    conexion.close()
 
     button_confirmar = customtkinter.CTkButton(master=frame, text="Confirmar",
                                                command=guardar_datos)
@@ -99,7 +142,8 @@ def main_utilidad():
 
 
 def labels(frame):
-    lb_utilidad_bruta = customtkinter.CTkLabel(master=frame, text='Utilidad Bruta', font=("Times New Roman", 50, "bold"))
+    lb_utilidad_bruta = customtkinter.CTkLabel(master=frame, text='Utilidad Bruta',
+                                               font=("Times New Roman", 50, "bold"))
     lb_utilidad_bruta.pack(pady=400, padx=400, )
     lb_utilidad_bruta.place(x=10, y=0)
 
