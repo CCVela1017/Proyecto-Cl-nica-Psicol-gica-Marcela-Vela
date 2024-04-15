@@ -21,7 +21,7 @@ def open_balance():
 
 
 def open_historial():
-    financiero.historial.main_historial()
+    financiero.historial.main_window()
 
 
 def buttons(frame, frame2):
