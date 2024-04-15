@@ -81,9 +81,11 @@ def main_utilidad():
 
         conexion = sqlite3.connect('src/database')
         cursor = conexion.cursor()
-        for i in lista_de_fechas:
-            if str(i) == str(fecha):
-                editar = True
+
+        if lista_de_fechas != []:
+            for i in lista_de_fechas:
+                if str(i) == str(fecha):
+                    editar = True
 
         if editar is False:
             try:
@@ -98,7 +100,8 @@ def main_utilidad():
                                (alquiler, energia, transporte, red, 0, fecha, total))
                 messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
                                                                         'enviados correctamente a la base de datos.')
-
+                conexion.commit()
+                conexion.close()
             except Exception as ex:
                 messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo '
                                                                            'no coincide con la base de datos, verifica los '

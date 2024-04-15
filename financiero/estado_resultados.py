@@ -2,7 +2,7 @@ import datetime
 import customtkinter
 import tkinter
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import sqlite3
 
 
@@ -11,6 +11,28 @@ mes_actual = fecha_actual.month
 anio_actual = fecha_actual.year
 
 fecha_ahorita = str(mes_actual) + str(anio_actual)
+
+def cargar_base_de_datos_de_estado_resultados():
+    try:
+        data = []
+        conexion = sqlite3.connect('src/database')
+        cursor = conexion.cursor()
+        cursor.execute('SELECT * FROM estado_de_resultados')
+        rows = cursor.fetchall()
+        for row in rows:
+            data.append(row)
+        lista = []
+        for item in data:
+            contador = 0
+            for datos in item:
+                if contador == 4:
+                    lista.append(datos)
+                contador += 1
+        return lista
+    except Exception as ex:
+        print(ex)
+        lista = []
+        return lista
 
 
 def cargar_base_de_datos_utilidad_bruta():
@@ -69,6 +91,8 @@ def obtener_columna(my_tree):
 
 
 def textos(lugar, total_vendido, total_comprado, lista_utilidad_bruta):
+    editar = False
+    lista_estados_resultados = cargar_base_de_datos_de_estado_resultados()
     """Servicios vendidos"""
     etiqueta = customtkinter.CTkLabel(master=lugar, text="Servicios dados:",
                                       font=("times new roman", 22, "bold"))
@@ -123,6 +147,55 @@ def textos(lugar, total_vendido, total_comprado, lista_utilidad_bruta):
     lb_total_con_isr.pack(pady=400, padx=400)
     lb_total_con_isr.place(x=450, y=650)
 
+    conexion = sqlite3.connect('src/database')
+    cursor = conexion.cursor()
+
+    if lista_estados_resultados != []:
+        editar = True
+
+    if editar is False:
+        try:
+            cursor.execute("INSERT INTO estado_de_resultados (comprado, "
+                           "vendido, "
+                           "utilidad_bruta, "
+                           "fecha, "
+                           "total_con_iva, "
+                           "total_sin_iva) "
+                           "VALUES (?, ?, ?, ?, ?, ?)",
+                           (total_vendido, total_comprado, lista_utilidad_bruta[7], fecha_ahorita,
+                            total_con_isr, total_sin_isr))
+            messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
+                                                                    'enviados correctamente a la base de datos.')
+            conexion.commit()
+            conexion.close()
+        except Exception as ex:
+            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo '
+                                                                       'no coincide con la base de datos, verifica los '
+                                                                       'datos ingresados.')
+
+            print(ex)
+            conexion.commit()
+            conexion.close()
+
+    else:
+        try:
+            cursor.execute("UPDATE estado_de_resultados SET comprado = ?, "
+                           "vendido = ?, "
+                           "utilidad_bruta = ?, "
+                           "fecha = ?, "
+                           "total_con_iva = ?, "
+                           "total_sin_iva = ?",
+                           (total_vendido, total_comprado, lista_utilidad_bruta[7], fecha_ahorita, lb_total_con_isr, total_sin_isr))
+            conexion.commit()  # Guarda los cambios en la base de datos
+            messagebox.showinfo('¡Datos Modificados Correctamente!',
+                                'Los datos ingresados fueron enviados correctamente a la base de datos.')
+        except sqlite3.Error as ex:
+            messagebox.showerror('¡Error al Modificar Datos!',
+                                 'parece que un campo no coincide con la base de datos, verifica los datos ingresados.')
+            print(ex)
+        finally:
+            if conexion:
+                conexion.close()
 
 def tabla1(lugar):
     """Tabla"""
