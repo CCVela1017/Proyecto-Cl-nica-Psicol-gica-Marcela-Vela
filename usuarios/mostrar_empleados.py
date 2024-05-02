@@ -10,18 +10,17 @@ def main():
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
 
-    root = customtkinter.CTkToplevel()
-    root.wm_attributes("-topmost", True)
+    root = customtkinter.CTk()
     root.title("Datos de Usuarios")
     root.iconbitmap('icon.ico')
     frame = customtkinter.CTkFrame(master=root)
     frame.pack(pady=20, padx=60, fill='both', expand=True)
-    frame2 = customtkinter.CTkFrame(master=frame, height=200, width=20)
-    frame2.pack(pady=130, padx=10, fill='both', expand=True)
+    frame2 = customtkinter.CTkFrame(master=frame, height=400, width=20)
+    frame2.pack(pady=100, padx=10, fill='both', expand=True)
 
     front_end(frame, frame2)
 
-    root.geometry('1280x550')
+    root.geometry('1280x400')
     root.mainloop()
 
 

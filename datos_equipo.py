@@ -32,9 +32,9 @@ def add_image(frame):
 
 def front_end(frame, frame2):
     def show_image(event):
-        y = event.y
-        item = int(my_tree.identify_row(y))
-        serie_row = data[item][6]
+        item = my_tree.focus()
+        values = list(my_tree.item(item, "values"))
+        serie_row = values[6]
 
         # extrae la imagen desde la base de datos
         conexion = sqlite3.connect('src/database')
