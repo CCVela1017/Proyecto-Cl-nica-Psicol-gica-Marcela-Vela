@@ -221,25 +221,25 @@ def main():
             costo_unitario = ib_costo.get()
             cantidad_comprada = ib_cantidad.get()
             total_gastado = int(ib_costo.get()) * int(ib_cantidad.get())
-            productos_comprados.append(nombre, costo_unitario, cantidad_comprada, total_gastado)
-
+            productos_comprados.append(nombre)
+            productos_comprados.append(costo_unitario)
+            productos_comprados.append(cantidad_comprada)
+            productos_comprados.append(total_gastado)
 
             """▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"""
             messagebox.showinfo('¡Datos Ingresados Correctamente!', 'Los datos ingresados fueron '
                                                                     'enviados correctamente a la base de datos.')
 
         except Exception as ex:
-            messagebox.showerror('¡Datos Ingresados Incorrectamente!', 'Vaya, parece que un campo '
+            messagebox.showerror(ex, 'Vaya, parece que un campo '
                                                                        'no coincide con la base de datos, verifica los '
                                                                        'datos ingresados.')
 
-            reset_all()
             print(ex)
 
         conexion.commit()
         conexion.close()
         registrar_factura()
-        reset_all()
 
 
     def registrar_factura():
