@@ -31,6 +31,7 @@ def main_utilidad():
     lista_de_fechas = cargar_base_de_datos_utilidad_bruta()
     customtkinter.set_appearance_mode('dark')
     customtkinter.set_default_color_theme('dark-blue')
+    global editar
     editar = False
     root.title("Utilidad Bruta")
     root.iconbitmap('icon.ico')
